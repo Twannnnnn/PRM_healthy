@@ -1,80 +1,29 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/main"
-    android:background="#A6C8E0"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tvTotalCalories"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="152dp"
-        android:text="Tổng calo: 0"
-        android:textColor="#2196F3"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="#A6C8E0">
 
-    <TextView
-        android:id="@+id/tvMealLogs"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Nhật ký bữa ăn:"
-        android:textSize="16sp"
-        android:textColor="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvTotalCalories"
-        android:layout_marginBottom="8dp"/>
+        <TextView
+            android:id="@+id/tvTotalSleepDuration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tổng thời gian ngủ: 0"
+            android:textSize="24sp"
+            android:textColor="#2196F3"
+            android:layout_marginBottom="16dp"
+            android:textStyle="bold"/>
 
-    <TextView
-        android:id="@+id/tvMealDetails"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/tvMealLogs"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:textSize="14sp"
-        android:textColor="#FFFFFF"
-        android:layout_marginBottom="16dp"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"/>
 
-    <TextView
-        android:id="@+id/tvTotalSleepDuration"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Tổng thời gian ngủ: 0"
-        android:textSize="20sp"
-        android:textColor="#2196F3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvMealDetails"
-        android:layout_marginBottom="16dp"/>
-
-    <TextView
-        android:id="@+id/tvSleepLogs"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Nhật ký giấc ngủ:"
-        android:textSize="16sp"
-        android:textColor="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvTotalSleepDuration"
-        android:layout_marginBottom="8dp"/>
-
-    <TextView
-        android:id="@+id/tvSleepDetails"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/tvSleepLogs"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:textSize="14sp"
-        android:textColor="#FFFFFF"
-        android:layout_marginBottom="16dp"/>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</ScrollView>
