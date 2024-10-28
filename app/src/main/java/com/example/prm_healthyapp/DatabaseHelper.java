@@ -20,8 +20,43 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS users (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "name TEXT NOT NULL, " +
-                "email TEXT NOT NULL UNIQUE, " +
-                "password TEXT NOT NULL)");
+                "email TEXT UNIQUE NOT NULL, " +
+                "password TEXT NOT NULL, " +
+                "age INTEGER, " +
+                "gender TEXT, " +
+                "weight REAL, " +
+                "height REAL, " +
+                "bmi REAL, " +
+                "body_fat_percentage REAL, " +
+                "waist REAL, " +
+                "neck REAL, " +
+                "hips REAL" +
+                ");");
+
+        // Tạo bảng experts
+        db.execSQL("CREATE TABLE IF NOT EXISTS experts (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "name TEXT NOT NULL, " +
+                "specialization TEXT NOT NULL" +
+                ");");
+
+        // Tạo bảng disease
+        db.execSQL("CREATE TABLE IF NOT EXISTS disease (" +
+                "disease_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "name TEXT NOT NULL, " +
+                "description TEXT" +
+                ");");
+
+        // Tạo bảng user_disease
+        db.execSQL("CREATE TABLE IF NOT EXISTS user_disease (" +
+                "user_id INTEGER, " +
+                "disease_id INTEGER, " +
+                "diagnosis_date DATE, " +
+                "notes TEXT, " +
+                "FOREIGN KEY (user_id) REFERENCES users(id), " +
+                "FOREIGN KEY (disease_id) REFERENCES disease(disease_id), " +
+                "PRIMARY KEY (user_id, disease_id)" +
+                ");");
 
         // Tạo các bảng khác
         db.execSQL("CREATE TABLE IF NOT EXISTS activity (" +
@@ -88,16 +123,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "advice_date TEXT NOT NULL, " +
                 "FOREIGN KEY (user_id) REFERENCES users(id), " +
                 "FOREIGN KEY (expert_id) REFERENCES experts(id))");
-
-        db.execSQL("CREATE TABLE IF NOT EXISTS experts (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "name TEXT NOT NULL, " +
-                "specialization TEXT NOT NULL)");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Xóa bảng cũ nếu tồn tại và tạo lại
+        db.execSQL("DROP TABLE IF EXISTS user_disease");
+        db.execSQL("DROP TABLE IF EXISTS disease");
+        db.execSQL("DROP TABLE IF EXISTS experts");
         db.execSQL("DROP TABLE IF EXISTS users");
         db.execSQL("DROP TABLE IF EXISTS activity");
         db.execSQL("DROP TABLE IF EXISTS sleep_log");
@@ -106,18 +139,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS meal_plan");
         db.execSQL("DROP TABLE IF EXISTS nutrition_goals");
         db.execSQL("DROP TABLE IF EXISTS expert_advice");
-        db.execSQL("DROP TABLE IF EXISTS experts");
         onCreate(db);
     }
-    public void addUser(String name, String email, String password) {
+
+    public void addUser(String name, String email, String password, Integer age, String gender, Float weight, Float height) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("name", name);
         values.put("email", email);
         values.put("password", password);
+        values.put("age", age);
+        values.put("gender", gender);
+        values.put("weight", weight);
+        values.put("height", height);
         db.insert("users", null, values);
         db.close();
     }
+
 
     public void addActivity(int userId, String name, String description, String startTime, String endTime) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -201,5 +239,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         return 0;
+    }
+    public Cursor getAllLogs(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Truy vấn meal_log
+        String mealLogQuery = "SELECT 'meal' AS log_type, meal_time AS log_time, meal_type AS title, food_items AS description " +
+                "FROM meal_log WHERE user_id = ? " +
+                "UNION ALL " +
+                // Truy vấn sleep_log
+                "SELECT 'sleep' AS log_type, sleep_start AS log_time, 'Giấc ngủ' AS title, sleep_end AS description " +
+                "FROM sleep_log WHERE user_id = ? " +
+                "UNION ALL " +
+                // Truy vấn activity
+                "SELECT 'activity' AS log_type, start_time AS log_time, name AS title, description " +
+                "FROM activity WHERE user_id = ? " +
+                "ORDER BY log_time";
+
+        return db.rawQuery(mealLogQuery, new String[]{String.valueOf(userId), String.valueOf(userId), String.valueOf(userId)});
     }
 }
