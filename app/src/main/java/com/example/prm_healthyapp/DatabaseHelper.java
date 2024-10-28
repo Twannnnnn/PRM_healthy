@@ -409,4 +409,91 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.delete("activity", "id = ?", new String[]{String.valueOf(id)});
         db.close();
     }
+
+    public Cursor getAllSleepLogs() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM sleep_log", null);
+    }
+
+    public SleepLogModel getSleepLogById(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM sleep_log WHERE id = ?", new String[]{String.valueOf(id)});
+
+        if (cursor != null && cursor.moveToFirst()) {
+            int idIndex = cursor.getColumnIndex("id");
+            int userIdIndex = cursor.getColumnIndex("user_id");
+            int sleepStartIndex = cursor.getColumnIndex("sleep_start");
+            int sleepEndIndex = cursor.getColumnIndex("sleep_end");
+            int durationIndex = cursor.getColumnIndex("duration");
+            int logDateIndex = cursor.getColumnIndex("log_date");
+
+            SleepLogModel sleepLog = new SleepLogModel(
+                    idIndex != -1 ? cursor.getInt(idIndex) : -1,
+                    userIdIndex != -1 ? cursor.getInt(userIdIndex) : -1,
+                    sleepStartIndex != -1 ? cursor.getString(sleepStartIndex) : null,
+                    sleepEndIndex != -1 ? cursor.getString(sleepEndIndex) : null,
+                    durationIndex != -1 ? cursor.getFloat(durationIndex) : 0.0f,
+                    logDateIndex != -1 ? cursor.getString(logDateIndex) : null
+            );
+            cursor.close();
+            return sleepLog;
+        }
+
+        // Close cursor if it's not null to avoid memory leaks
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        return null;
+    }
+
+    public void updateSleepLog(int id, String sleepStart, String sleepEnd, float duration, String logDate) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("sleep_start", sleepStart);
+        values.put("sleep_end", sleepEnd);
+        values.put("duration", duration);
+        values.put("log_date", logDate);
+        db.update("sleep_log", values, "id = ?", new String[]{String.valueOf(id)});
+        db.close();
+    }
+
+    public void deleteSleepLog(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("sleep_log", "id = ?", new String[]{String.valueOf(id)});
+        db.close();
+    }
+
+    public boolean checkSleepLogExists(String logDate) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM sleep_log WHERE log_date = ?", new String[]{logDate});
+        boolean exists = cursor.getCount() > 0;
+        cursor.close();
+        return exists;
+    }
+
+    public SleepLogModel getLastSleepLog() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM sleep_log ORDER BY log_date DESC LIMIT 1", null);
+        if (cursor != null && cursor.moveToFirst()) {
+            int idIndex = cursor.getColumnIndex("id");
+            int userIdIndex = cursor.getColumnIndex("user_id");
+            int sleepStartIndex = cursor.getColumnIndex("sleep_start");
+            int sleepEndIndex = cursor.getColumnIndex("sleep_end");
+            int durationIndex = cursor.getColumnIndex("duration");
+            int logDateIndex = cursor.getColumnIndex("log_date");
+
+            SleepLogModel sleepLog = new SleepLogModel(
+                    idIndex != -1 ? cursor.getInt(idIndex) : -1,
+                    userIdIndex != -1 ? cursor.getInt(userIdIndex) : -1,
+                    sleepStartIndex != -1 ? cursor.getString(sleepStartIndex) : null,
+                    sleepEndIndex != -1 ? cursor.getString(sleepEndIndex) : null,
+                    durationIndex != -1 ? cursor.getFloat(durationIndex) : 0.0f,
+                    logDateIndex != -1 ? cursor.getString(logDateIndex) : null
+            );
+            cursor.close();
+            return sleepLog;
+        }
+        return null;
+    }
 }

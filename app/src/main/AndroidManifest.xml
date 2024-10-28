@@ -31,6 +31,12 @@
             android:name=".AddUpdateActivity"
             android:exported="false"/>
         <activity
+            android:name=".AddUpdateSleepLogActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".SleepLogListActivity"
+            android:exported="false"/>
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

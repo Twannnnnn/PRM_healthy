@@ -3,24 +3,30 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="8dp">
+    android:padding="8dp"
+    android:background="#FFFFFF">
 
     <TextView
         android:id="@+id/textViewActivityName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:textColor="#000000" />
 
     <Button
         android:id="@+id/btnUpdate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Update" />
+        android:text="Update"
+        android:background="#2196F3"
+        android:textColor="@android:color/white" />
 
     <Button
         android:id="@+id/btnDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Delete" />
+        android:text="Delete"
+        android:background="#2196F3"
+        android:textColor="@android:color/white" />
 </LinearLayout>

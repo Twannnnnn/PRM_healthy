@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnGoToReport;
     private Button btnUserInfo;
     private Button btnActivities;
+    private Button btnGoToSleepLog;
     DatabaseHelper dbHelper;
 
     @Override
@@ -50,11 +51,13 @@ public class MainActivity extends AppCompatActivity {
     private void initUI() {
         btnGoToReport = findViewById(R.id.btnGoToReport);
         btnUserInfo = findViewById(R.id.btnUserInfo);
-        btnActivities = findViewById(R.id.btnGoToActivities);// Initialize the new button
+        btnActivities = findViewById(R.id.btnGoToActivities);
+        btnGoToSleepLog = findViewById(R.id.btnGoToSleepLog);// Initialize the new button
 
         btnGoToReport.setOnClickListener(this::onAction);
         btnUserInfo.setOnClickListener(this::onUserInfoAction);
-        btnActivities.setOnClickListener(this::onActivities);// Set the click listener
+        btnActivities.setOnClickListener(this::onActivities);
+        btnGoToSleepLog.setOnClickListener(this::onSleepLog);// Set the click listener
     }
 
     private void onAction(View view) {
@@ -72,6 +75,12 @@ public class MainActivity extends AppCompatActivity {
     private void onActivities(View view) {
         // Navigate to UserInfoActivity
         Intent intent = new Intent(MainActivity.this, ActivityListActivity.class);
+        startActivity(intent);
+    }
+
+    private void onSleepLog(View view) {
+        // Navigate to UserInfoActivity
+        Intent intent = new Intent(MainActivity.this, SleepLogListActivity.class);
         startActivity(intent);
     }
 }
