@@ -286,4 +286,79 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return db.rawQuery(mealLogQuery, new String[]{String.valueOf(userId), String.valueOf(userId), String.valueOf(userId)});
     }
+
+    public boolean insertUser(User user) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put("name", user.getName());
+        values.put("email", user.getEmail());
+        values.put("password", user.getPassword());
+        values.put("age", user.getAge());
+        values.put("gender", user.getGender());
+        values.put("weight", user.getWeight());
+        values.put("height", user.getHeight());
+        values.put("bmi", user.getBmi());
+        values.put("body_fat_percentage", user.getBodyFatPercentage());
+        values.put("waist", user.getWaist());
+        values.put("neck", user.getNeck());
+        values.put("hips", user.getHips());
+
+        // Insert the new row and return the ID of the new row
+        long userId = db.insert("users", null, values);
+        db.close(); // Close the database connection
+        return userId != -1;
+    }
+
+    public User getFirstUser() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        User user = null;
+
+        // Query to select the first user from the users table
+        Cursor cursor = db.rawQuery("SELECT * FROM users LIMIT 1", null);
+
+        // Check if the cursor has any results
+        if (cursor != null && cursor.moveToFirst()) {
+            user = new User();
+
+            // Retrieve and check column indexes
+            int idIndex = cursor.getColumnIndex("id");
+            int nameIndex = cursor.getColumnIndex("name");
+            int emailIndex = cursor.getColumnIndex("email");
+            int passwordIndex = cursor.getColumnIndex("password");
+            int ageIndex = cursor.getColumnIndex("age");
+            int genderIndex = cursor.getColumnIndex("gender");
+            int weightIndex = cursor.getColumnIndex("weight");
+            int heightIndex = cursor.getColumnIndex("height");
+            int bmiIndex = cursor.getColumnIndex("bmi");
+            int bodyFatIndex = cursor.getColumnIndex("body_fat_percentage");
+            int waistIndex = cursor.getColumnIndex("waist");
+            int neckIndex = cursor.getColumnIndex("neck");
+            int hipsIndex = cursor.getColumnIndex("hips");
+
+            // Only set values if column indexes are valid (≥ 0)
+            if (idIndex >= 0) user.setId(cursor.getInt(idIndex));
+            if (nameIndex >= 0) user.setName(cursor.getString(nameIndex));
+            if (emailIndex >= 0) user.setEmail(cursor.getString(emailIndex));
+            if (passwordIndex >= 0) user.setPassword(cursor.getString(passwordIndex));
+            if (ageIndex >= 0) user.setAge(cursor.getInt(ageIndex));
+            if (genderIndex >= 0) user.setGender(cursor.getString(genderIndex));
+            if (weightIndex >= 0) user.setWeight(cursor.getDouble(weightIndex));
+            if (heightIndex >= 0) user.setHeight(cursor.getDouble(heightIndex));
+            if (bmiIndex >= 0) user.setBmi(cursor.getDouble(bmiIndex));
+            if (bodyFatIndex >= 0) user.setBodyFatPercentage(cursor.getDouble(bodyFatIndex));
+            if (waistIndex >= 0) user.setWaist(cursor.getDouble(waistIndex));
+            if (neckIndex >= 0) user.setNeck(cursor.getDouble(neckIndex));
+            if (hipsIndex >= 0) user.setHips(cursor.getDouble(hipsIndex));
+        }
+
+        // Close cursor and database connection
+        if (cursor != null) {
+            cursor.close();
+        }
+        db.close();
+
+        return user; // Return the User object or null if not found
+    }
+
 }
