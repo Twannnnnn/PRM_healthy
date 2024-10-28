@@ -361,4 +361,52 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return user; // Return the User object or null if not found
     }
 
+    public Cursor getAllActivities() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM activity", null);
+    }
+
+    public ActivityModel getActivityById(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM activity WHERE id = ?", new String[]{String.valueOf(id)});
+        if (cursor != null && cursor.moveToFirst()) {
+            int idIndex = cursor.getColumnIndex("id");
+            int userIdIndex = cursor.getColumnIndex("user_id");
+            int nameIndex = cursor.getColumnIndex("name");
+            int descriptionIndex = cursor.getColumnIndex("description");
+            int startTimeIndex = cursor.getColumnIndex("start_time");
+            int endTimeIndex = cursor.getColumnIndex("end_time");
+            int reminderIndex = cursor.getColumnIndex("reminder");
+
+            ActivityModel activity = new ActivityModel(
+                    idIndex >= 0 ? cursor.getInt(idIndex) : 0,
+                    userIdIndex >= 0 ? cursor.getInt(userIdIndex) : 0,
+                    nameIndex >= 0 ? cursor.getString(nameIndex) : "",
+                    descriptionIndex >= 0 ? cursor.getString(descriptionIndex) : "",
+                    startTimeIndex >= 0 ? cursor.getString(startTimeIndex) : "",
+                    endTimeIndex >= 0 ? cursor.getString(endTimeIndex) : "",
+                    reminderIndex >= 0 && cursor.getInt(reminderIndex) == 1
+            );
+            cursor.close();
+            return activity;
+        }
+        return null;
+    }
+
+    public void updateActivity(int id, String name, String description, String startTime, String endTime) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("name", name);
+        values.put("description", description);
+        values.put("start_time", startTime);
+        values.put("end_time", endTime);
+        db.update("activity", values, "id = ?", new String[]{String.valueOf(id)});
+        db.close();
+    }
+
+    public void deleteActivity(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("activity", "id = ?", new String[]{String.valueOf(id)});
+        db.close();
+    }
 }

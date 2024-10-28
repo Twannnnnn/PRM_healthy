@@ -15,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class MainActivity extends AppCompatActivity {
     private Button btnGoToReport;
     private Button btnUserInfo;
+    private Button btnActivities;
     DatabaseHelper dbHelper;
 
     @Override
@@ -48,10 +49,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void initUI() {
         btnGoToReport = findViewById(R.id.btnGoToReport);
-        btnUserInfo = findViewById(R.id.btnUserInfo);  // Initialize the new button
+        btnUserInfo = findViewById(R.id.btnUserInfo);
+        btnActivities = findViewById(R.id.btnGoToActivities);// Initialize the new button
 
         btnGoToReport.setOnClickListener(this::onAction);
-        btnUserInfo.setOnClickListener(this::onUserInfoAction);  // Set the click listener
+        btnUserInfo.setOnClickListener(this::onUserInfoAction);
+        btnActivities.setOnClickListener(this::onActivities);// Set the click listener
     }
 
     private void onAction(View view) {
@@ -63,6 +66,12 @@ public class MainActivity extends AppCompatActivity {
     private void onUserInfoAction(View view) {
         // Navigate to UserInfoActivity
         Intent intent = new Intent(MainActivity.this, UserInfoActivity.class);
+        startActivity(intent);
+    }
+
+    private void onActivities(View view) {
+        // Navigate to UserInfoActivity
+        Intent intent = new Intent(MainActivity.this, ActivityListActivity.class);
         startActivity(intent);
     }
 }

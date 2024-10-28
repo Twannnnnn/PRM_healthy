@@ -25,6 +25,12 @@
             android:name=".report"
             android:exported="false" />
         <activity
+            android:name=".ActivityListActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".AddUpdateActivity"
+            android:exported="false"/>
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
