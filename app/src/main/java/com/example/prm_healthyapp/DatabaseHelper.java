@@ -57,7 +57,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "FOREIGN KEY (disease_id) REFERENCES disease(disease_id), " +
                 "PRIMARY KEY (user_id, disease_id)" +
                 ");");
-
+// Tạo bảng food
+        db.execSQL("CREATE TABLE IF NOT EXISTS food (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "name TEXT NOT NULL, " +
+                "fat REAL, " +
+                "protein REAL, " +
+                "carbohydrates REAL, " +
+                "fiber REAL, " + // Chất xơ
+                "vitamins TEXT, " + // Vitamin
+                "minerals TEXT " + // Khoáng chất
+                ");");
         // Tạo các bảng khác
         db.execSQL("CREATE TABLE IF NOT EXISTS activity (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -215,6 +225,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         return 0;
+    }
+    public void addFood(String name, float fat, float protein, float carbohydrates, float fiber, String vitamins, String minerals) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("name", name);
+        values.put("fat", fat);
+        values.put("protein", protein);
+        values.put("carbohydrates", carbohydrates);
+        values.put("fiber", fiber);
+        values.put("vitamins", vitamins);
+        values.put("minerals", minerals);
+        db.insert("food", null, values);
+        db.close();
+    }
+
+    public Cursor getAllFood() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM food", null);
     }
     public void addSleepLog(int userId, String sleepStart, String sleepEnd, float duration, String logDate) {
         SQLiteDatabase db = this.getWritableDatabase();
