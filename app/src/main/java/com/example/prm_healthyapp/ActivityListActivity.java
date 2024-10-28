@@ -95,6 +95,14 @@ public class ActivityListActivity extends AppCompatActivity implements ActivityA
     }
 
     @Override
+    public void onSetReminderClick(int position) {
+        ActivityModel activity = activityList.get(position);
+        Intent intent = new Intent(ActivityListActivity.this, SetReminderActivity.class);
+        intent.putExtra("activityId", activity.getId()); // Gửi ID hoạt động để đặt nhắc nhở
+        startActivity(intent);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         loadActivities();

@@ -18,6 +18,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Activi
     public interface OnActivityListener {
         void onDeleteClick(int position);
         void onUpdateClick(int position);
+        void onSetReminderClick(int position); // Thêm hàm để tạo lời nhắc
     }
 
     public ActivityAdapter(List<ActivityModel> activityList, OnActivityListener listener) {
@@ -47,12 +48,14 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Activi
         TextView textViewActivityName;
         Button btnUpdate;
         Button btnDelete;
+        Button btnSetReminder; // Khai báo nút Set Reminder
 
         public ActivityViewHolder(@NonNull View itemView, OnActivityListener listener) {
             super(itemView);
             textViewActivityName = itemView.findViewById(R.id.textViewActivityName);
             btnUpdate = itemView.findViewById(R.id.btnUpdate);
             btnDelete = itemView.findViewById(R.id.btnDelete);
+            btnSetReminder = itemView.findViewById(R.id.btnSetReminder); // Khởi tạo nút Set Reminder
 
             btnDelete.setOnClickListener(v -> {
                 if (listener != null) {
@@ -63,6 +66,12 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Activi
             btnUpdate.setOnClickListener(v -> {
                 if (listener != null) {
                     listener.onUpdateClick(getAdapterPosition());
+                }
+            });
+
+            btnSetReminder.setOnClickListener(v -> {
+                if (listener != null) {
+                    listener.onSetReminderClick(getAdapterPosition()); // Gọi hàm khi nhấn nút Set Reminder
                 }
             });
         }

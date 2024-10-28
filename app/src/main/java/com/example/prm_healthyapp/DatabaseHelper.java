@@ -496,4 +496,53 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return null;
     }
+
+    public void addReminder(int userId, int activityId, String reminderTime) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("user_id", userId);
+        values.put("activity_id", activityId);
+        values.put("reminder_time", reminderTime);
+        values.put("is_active", true);
+        db.insert("reminders", null, values);
+        db.close();
+    }
+
+    public Cursor getAllReminders(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM reminders WHERE user_id = ?", new String[]{String.valueOf(userId)});
+    }
+
+    public Reminder getReminderForActivity(int activityId, int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM reminders WHERE activity_id = ? AND user_id = ?",
+                new String[]{String.valueOf(activityId), String.valueOf(userId)});
+
+        if (cursor != null && cursor.moveToFirst()) {
+            Reminder reminder = new Reminder(
+                    cursor.getInt(cursor.getColumnIndex("id")),
+                    cursor.getInt(cursor.getColumnIndex("user_id")),
+                    cursor.getInt(cursor.getColumnIndex("activity_id")),
+                    cursor.getString(cursor.getColumnIndex("reminder_time")),
+                    cursor.getInt(cursor.getColumnIndex("is_active")) == 1
+            );
+            cursor.close();
+            return reminder;
+        }
+        return null;
+    }
+
+    public void updateReminder(int id, String reminderTime) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("reminder_time", reminderTime);
+        db.update("reminders", values, "id = ?", new String[]{String.valueOf(id)});
+        db.close();
+    }
+
+    public void deleteReminder(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("reminders", "id = ?", new String[]{String.valueOf(id)});
+        db.close();
+    }
 }
