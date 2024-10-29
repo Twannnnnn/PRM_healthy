@@ -31,7 +31,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.534" />
+        app:layout_constraintVertical_bias="0.622" />
 
     <Button
         android:id="@+id/btnGoToSleepLog"
@@ -41,10 +41,9 @@
         android:text="Xem Thời Gian Ngủ"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.658" />
+        app:layout_constraintVertical_bias="0.739" />
 
     <Button
         android:id="@+id/btnUserInfo"
@@ -58,7 +57,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.276" />
-        app:layout_constraintVertical_bias="0.254" />
     <Button
         android:id="@+id/btnAddFood"
         android:layout_width="wrap_content"
