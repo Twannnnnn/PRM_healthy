@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
                 showAddFoodDialog();
             }
         });
+        checkUser();
+        initUI();
     }
 
     private void showAddFoodDialog() {
@@ -64,8 +66,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         dialog.show();
-        checkUser();
-        initUI();
     }
 
     private void checkUser() {
@@ -115,5 +115,5 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    
+
 }
