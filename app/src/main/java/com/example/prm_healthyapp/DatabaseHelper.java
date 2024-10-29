@@ -286,4 +286,263 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return db.rawQuery(mealLogQuery, new String[]{String.valueOf(userId), String.valueOf(userId), String.valueOf(userId)});
     }
+
+    public boolean insertUser(User user) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put("name", user.getName());
+        values.put("email", user.getEmail());
+        values.put("password", user.getPassword());
+        values.put("age", user.getAge());
+        values.put("gender", user.getGender());
+        values.put("weight", user.getWeight());
+        values.put("height", user.getHeight());
+        values.put("bmi", user.getBmi());
+        values.put("body_fat_percentage", user.getBodyFatPercentage());
+        values.put("waist", user.getWaist());
+        values.put("neck", user.getNeck());
+        values.put("hips", user.getHips());
+
+        // Insert the new row and return the ID of the new row
+        long userId = db.insert("users", null, values);
+        db.close(); // Close the database connection
+        return userId != -1;
+    }
+
+    public User getFirstUser() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        User user = null;
+
+        // Query to select the first user from the users table
+        Cursor cursor = db.rawQuery("SELECT * FROM users LIMIT 1", null);
+
+        // Check if the cursor has any results
+        if (cursor != null && cursor.moveToFirst()) {
+            user = new User();
+
+            // Retrieve and check column indexes
+            int idIndex = cursor.getColumnIndex("id");
+            int nameIndex = cursor.getColumnIndex("name");
+            int emailIndex = cursor.getColumnIndex("email");
+            int passwordIndex = cursor.getColumnIndex("password");
+            int ageIndex = cursor.getColumnIndex("age");
+            int genderIndex = cursor.getColumnIndex("gender");
+            int weightIndex = cursor.getColumnIndex("weight");
+            int heightIndex = cursor.getColumnIndex("height");
+            int bmiIndex = cursor.getColumnIndex("bmi");
+            int bodyFatIndex = cursor.getColumnIndex("body_fat_percentage");
+            int waistIndex = cursor.getColumnIndex("waist");
+            int neckIndex = cursor.getColumnIndex("neck");
+            int hipsIndex = cursor.getColumnIndex("hips");
+
+            // Only set values if column indexes are valid (≥ 0)
+            if (idIndex >= 0) user.setId(cursor.getInt(idIndex));
+            if (nameIndex >= 0) user.setName(cursor.getString(nameIndex));
+            if (emailIndex >= 0) user.setEmail(cursor.getString(emailIndex));
+            if (passwordIndex >= 0) user.setPassword(cursor.getString(passwordIndex));
+            if (ageIndex >= 0) user.setAge(cursor.getInt(ageIndex));
+            if (genderIndex >= 0) user.setGender(cursor.getString(genderIndex));
+            if (weightIndex >= 0) user.setWeight(cursor.getDouble(weightIndex));
+            if (heightIndex >= 0) user.setHeight(cursor.getDouble(heightIndex));
+            if (bmiIndex >= 0) user.setBmi(cursor.getDouble(bmiIndex));
+            if (bodyFatIndex >= 0) user.setBodyFatPercentage(cursor.getDouble(bodyFatIndex));
+            if (waistIndex >= 0) user.setWaist(cursor.getDouble(waistIndex));
+            if (neckIndex >= 0) user.setNeck(cursor.getDouble(neckIndex));
+            if (hipsIndex >= 0) user.setHips(cursor.getDouble(hipsIndex));
+        }
+
+        // Close cursor and database connection
+        if (cursor != null) {
+            cursor.close();
+        }
+        db.close();
+
+        return user; // Return the User object or null if not found
+    }
+
+    public Cursor getAllActivities() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM activity", null);
+    }
+
+    public ActivityModel getActivityById(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM activity WHERE id = ?", new String[]{String.valueOf(id)});
+        if (cursor != null && cursor.moveToFirst()) {
+            int idIndex = cursor.getColumnIndex("id");
+            int userIdIndex = cursor.getColumnIndex("user_id");
+            int nameIndex = cursor.getColumnIndex("name");
+            int descriptionIndex = cursor.getColumnIndex("description");
+            int startTimeIndex = cursor.getColumnIndex("start_time");
+            int endTimeIndex = cursor.getColumnIndex("end_time");
+            int reminderIndex = cursor.getColumnIndex("reminder");
+
+            ActivityModel activity = new ActivityModel(
+                    idIndex >= 0 ? cursor.getInt(idIndex) : 0,
+                    userIdIndex >= 0 ? cursor.getInt(userIdIndex) : 0,
+                    nameIndex >= 0 ? cursor.getString(nameIndex) : "",
+                    descriptionIndex >= 0 ? cursor.getString(descriptionIndex) : "",
+                    startTimeIndex >= 0 ? cursor.getString(startTimeIndex) : "",
+                    endTimeIndex >= 0 ? cursor.getString(endTimeIndex) : "",
+                    reminderIndex >= 0 && cursor.getInt(reminderIndex) == 1
+            );
+            cursor.close();
+            return activity;
+        }
+        return null;
+    }
+
+    public void updateActivity(int id, String name, String description, String startTime, String endTime) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("name", name);
+        values.put("description", description);
+        values.put("start_time", startTime);
+        values.put("end_time", endTime);
+        db.update("activity", values, "id = ?", new String[]{String.valueOf(id)});
+        db.close();
+    }
+
+    public void deleteActivity(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("activity", "id = ?", new String[]{String.valueOf(id)});
+        db.close();
+    }
+
+    public Cursor getAllSleepLogs() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM sleep_log", null);
+    }
+
+    public SleepLogModel getSleepLogById(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM sleep_log WHERE id = ?", new String[]{String.valueOf(id)});
+
+        if (cursor != null && cursor.moveToFirst()) {
+            int idIndex = cursor.getColumnIndex("id");
+            int userIdIndex = cursor.getColumnIndex("user_id");
+            int sleepStartIndex = cursor.getColumnIndex("sleep_start");
+            int sleepEndIndex = cursor.getColumnIndex("sleep_end");
+            int durationIndex = cursor.getColumnIndex("duration");
+            int logDateIndex = cursor.getColumnIndex("log_date");
+
+            SleepLogModel sleepLog = new SleepLogModel(
+                    idIndex != -1 ? cursor.getInt(idIndex) : -1,
+                    userIdIndex != -1 ? cursor.getInt(userIdIndex) : -1,
+                    sleepStartIndex != -1 ? cursor.getString(sleepStartIndex) : null,
+                    sleepEndIndex != -1 ? cursor.getString(sleepEndIndex) : null,
+                    durationIndex != -1 ? cursor.getFloat(durationIndex) : 0.0f,
+                    logDateIndex != -1 ? cursor.getString(logDateIndex) : null
+            );
+            cursor.close();
+            return sleepLog;
+        }
+
+        // Close cursor if it's not null to avoid memory leaks
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        return null;
+    }
+
+    public void updateSleepLog(int id, String sleepStart, String sleepEnd, float duration, String logDate) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("sleep_start", sleepStart);
+        values.put("sleep_end", sleepEnd);
+        values.put("duration", duration);
+        values.put("log_date", logDate);
+        db.update("sleep_log", values, "id = ?", new String[]{String.valueOf(id)});
+        db.close();
+    }
+
+    public void deleteSleepLog(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("sleep_log", "id = ?", new String[]{String.valueOf(id)});
+        db.close();
+    }
+
+    public boolean checkSleepLogExists(String logDate) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM sleep_log WHERE log_date = ?", new String[]{logDate});
+        boolean exists = cursor.getCount() > 0;
+        cursor.close();
+        return exists;
+    }
+
+    public SleepLogModel getLastSleepLog() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM sleep_log ORDER BY log_date DESC LIMIT 1", null);
+        if (cursor != null && cursor.moveToFirst()) {
+            int idIndex = cursor.getColumnIndex("id");
+            int userIdIndex = cursor.getColumnIndex("user_id");
+            int sleepStartIndex = cursor.getColumnIndex("sleep_start");
+            int sleepEndIndex = cursor.getColumnIndex("sleep_end");
+            int durationIndex = cursor.getColumnIndex("duration");
+            int logDateIndex = cursor.getColumnIndex("log_date");
+
+            SleepLogModel sleepLog = new SleepLogModel(
+                    idIndex != -1 ? cursor.getInt(idIndex) : -1,
+                    userIdIndex != -1 ? cursor.getInt(userIdIndex) : -1,
+                    sleepStartIndex != -1 ? cursor.getString(sleepStartIndex) : null,
+                    sleepEndIndex != -1 ? cursor.getString(sleepEndIndex) : null,
+                    durationIndex != -1 ? cursor.getFloat(durationIndex) : 0.0f,
+                    logDateIndex != -1 ? cursor.getString(logDateIndex) : null
+            );
+            cursor.close();
+            return sleepLog;
+        }
+        return null;
+    }
+
+    public void addReminder(int userId, int activityId, String reminderTime) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("user_id", userId);
+        values.put("activity_id", activityId);
+        values.put("reminder_time", reminderTime);
+        values.put("is_active", true);
+        db.insert("reminders", null, values);
+        db.close();
+    }
+
+    public Cursor getAllReminders(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM reminders WHERE user_id = ?", new String[]{String.valueOf(userId)});
+    }
+
+    public Reminder getReminderForActivity(int activityId, int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM reminders WHERE activity_id = ? AND user_id = ?",
+                new String[]{String.valueOf(activityId), String.valueOf(userId)});
+
+        if (cursor != null && cursor.moveToFirst()) {
+            Reminder reminder = new Reminder(
+                    cursor.getInt(cursor.getColumnIndex("id")),
+                    cursor.getInt(cursor.getColumnIndex("user_id")),
+                    cursor.getInt(cursor.getColumnIndex("activity_id")),
+                    cursor.getString(cursor.getColumnIndex("reminder_time")),
+                    cursor.getInt(cursor.getColumnIndex("is_active")) == 1
+            );
+            cursor.close();
+            return reminder;
+        }
+        return null;
+    }
+
+    public void updateReminder(int id, String reminderTime) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("reminder_time", reminderTime);
+        db.update("reminders", values, "id = ?", new String[]{String.valueOf(id)});
+        db.close();
+    }
+
+    public void deleteReminder(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("reminders", "id = ?", new String[]{String.valueOf(id)});
+        db.close();
+    }
 }
