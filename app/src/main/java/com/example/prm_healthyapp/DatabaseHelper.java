@@ -1,5 +1,6 @@
 package com.example.prm_healthyapp;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -8,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "health_management.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 12;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -102,6 +103,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "user_id INTEGER, " +
                 "meal_type TEXT NOT NULL, " +
                 "food_items TEXT NOT NULL, " +
+                "food_mass TEXT NOT NULL, " +
                 "total_calories REAL, " +
                 "meal_time TEXT NOT NULL, " +
                 "log_date TEXT NOT NULL, " +
@@ -133,6 +135,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "advice_date TEXT NOT NULL, " +
                 "FOREIGN KEY (user_id) REFERENCES users(id), " +
                 "FOREIGN KEY (expert_id) REFERENCES experts(id))");
+        db.execSQL("CREATE TABLE IF NOT EXISTS nutrition_log (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "meal_log_id INTEGER, " +
+                "food_name TEXT NOT NULL, " +
+                "calories REAL, " +
+                "fat REAL, " +
+                "protein REAL, " +
+                "carbohydrates REAL, " +
+                "fiber REAL, " +
+                "vitamins TEXT, " +
+                "minerals TEXT, " +
+                "FOREIGN KEY (meal_log_id) REFERENCES meal_log(id)" +
+                ");");
+        addDemoData(db);
     }
 
     @Override
@@ -519,7 +535,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[]{String.valueOf(activityId), String.valueOf(userId)});
 
         if (cursor != null && cursor.moveToFirst()) {
-            Reminder reminder = new Reminder(
+            @SuppressLint("Range") Reminder reminder = new Reminder(
                     cursor.getInt(cursor.getColumnIndex("id")),
                     cursor.getInt(cursor.getColumnIndex("user_id")),
                     cursor.getInt(cursor.getColumnIndex("activity_id")),
@@ -531,7 +547,60 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return null;
     }
+    private void addDemoData(SQLiteDatabase db) {
+        // Add demo users
+        for (int i = 1; i <= 10; i++) {
+            ContentValues userValues = new ContentValues();
+            userValues.put("name", "User " + i);
+            userValues.put("email", "user" + i + "@example.com");
+            userValues.put("password", "password" + i);
+            userValues.put("age", 20 + i);
+            userValues.put("gender", (i % 2 == 0) ? "Male" : "Female");
+            userValues.put("weight", 60 + (i * 2));
+            userValues.put("height", 150 + (i * 3));
+            db.insert("users", null, userValues);
+        }
 
+        // Manually add meal logs
+        addMealLog(db, 1, "Breakfast", "Eggs, Bread", "150g", 300, "08:00", "2024-10-30");
+        addMealLog(db, 1, "Lunch", "Chicken, Rice", "200g", 500, "12:00", "2024-10-30");
+        addMealLog(db, 1, "Dinner", "Fish, Salad", "250g", 400, "18:00", "2024-10-30");
+        addMealLog(db, 2, "Breakfast", "Pasta, Cheese", "180g", 350, "07:30", "2024-10-30");
+        addMealLog(db, 2, "Lunch", "Apples, Yogurt", "160g", 250, "12:30", "2024-10-30");
+        addMealLog(db, 3, "Dinner", "Nuts, Bananas", "100g", 200, "19:00", "2024-10-30");
+        addMealLog(db, 4, "Snack", "Tomatoes, Garlic", "120g", 150, "15:00", "2024-10-30");
+        addMealLog(db, 5, "Lunch", "Carrots, Broccoli", "140g", 220, "12:15", "2024-10-30");
+        addMealLog(db, 6, "Dinner", "Peppers, Onions", "170g", 300, "18:45", "2024-10-30");
+        addMealLog(db, 7, "Breakfast", "Spinach, Yogurt", "130g", 200, "09:00", "2024-10-30");
+
+        // Add demo sleep logs
+        addSleepLog(db, 1, "22:00", "06:00", 8.0f, "2024-10-30");
+        addSleepLog(db, 2, "23:00", "07:00", 8.0f, "2024-10-30");
+        addSleepLog(db, 3, "21:30", "05:30", 8.0f, "2024-10-30");
+        // Continue adding sleep logs as needed...
+    }
+
+    private void addMealLog(SQLiteDatabase db, int userId, String mealType, String foodItems, String foodMass, float totalCalories, String mealTime, String logDate) {
+        ContentValues mealLogValues = new ContentValues();
+        mealLogValues.put("user_id", userId);
+        mealLogValues.put("meal_type", mealType);
+        mealLogValues.put("food_items", foodItems);
+        mealLogValues.put("food_mass", foodMass);
+        mealLogValues.put("total_calories", totalCalories);
+        mealLogValues.put("meal_time", mealTime);
+        mealLogValues.put("log_date", logDate);
+        db.insert("meal_log", null, mealLogValues);
+    }
+
+    private void addSleepLog(SQLiteDatabase db, int userId, String sleepStart, String sleepEnd, float duration, String logDate) {
+        ContentValues sleepLogValues = new ContentValues();
+        sleepLogValues.put("user_id", userId);
+        sleepLogValues.put("sleep_start", sleepStart);
+        sleepLogValues.put("sleep_end", sleepEnd);
+        sleepLogValues.put("duration", duration);
+        sleepLogValues.put("log_date", logDate);
+        db.insert("sleep_log", null, sleepLogValues);
+    }
     public void updateReminder(int id, String reminderTime) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -545,4 +614,5 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.delete("reminders", "id = ?", new String[]{String.valueOf(id)});
         db.close();
     }
+
 }

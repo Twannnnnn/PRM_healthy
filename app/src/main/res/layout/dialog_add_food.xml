@@ -1,0 +1,49 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#FFFFFF">
+
+    <EditText
+        android:id="@+id/editTextFoodName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Tên thực phẩm" />
+
+    <EditText
+        android:id="@+id/editTextFat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Chất béo (grams)"
+        android:inputType="numberDecimal" />
+
+    <EditText
+        android:id="@+id/editTextProtein"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Đạm (grams)"
+        android:inputType="numberDecimal" />
+
+    <EditText
+        android:id="@+id/editTextCarbohydrates"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Tinh bột (grams)"
+        android:inputType="numberDecimal" />
+
+    <EditText
+        android:id="@+id/editTextFiber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Chất xơ (grams)"
+        android:inputType="numberDecimal" />
+
+    <Button
+        android:id="@+id/buttonSaveFood"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lưu thực phẩm"
+        android:layout_gravity="center" />
+
+</LinearLayout>

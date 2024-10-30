@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddFoodActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <EditText
+            android:id="@+id/editTextFoodName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter food name"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/editTextFat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter fat content (grams)"
+            android:inputType="numberDecimal" />
+
+        <EditText
+            android:id="@+id/editTextProtein"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter protein content (grams)"
+            android:inputType="numberDecimal" />
+
+        <EditText
+            android:id="@+id/editTextCarbohydrates"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter carbohydrates content (grams)"
+            android:inputType="numberDecimal" />
+
+        <EditText
+            android:id="@+id/editTextFiber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter fiber content (grams)"
+            android:inputType="numberDecimal" />
+
+        <EditText
+            android:id="@+id/editTextVitamins"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter vitamins"
+            android:inputType="textMultiLine" />
+
+        <EditText
+            android:id="@+id/editTextMinerals"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter minerals"
+            android:inputType="textMultiLine" />
+
+        <Button
+            android:id="@+id/buttonSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save Food"
+            android:layout_gravity="center_horizontal" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
