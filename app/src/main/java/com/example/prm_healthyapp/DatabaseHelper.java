@@ -1,5 +1,6 @@
 package com.example.prm_healthyapp;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -133,6 +134,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "advice_date TEXT NOT NULL, " +
                 "FOREIGN KEY (user_id) REFERENCES users(id), " +
                 "FOREIGN KEY (expert_id) REFERENCES experts(id))");
+        db.execSQL("CREATE TABLE IF NOT EXISTS nutrition_log (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "meal_log_id INTEGER, " +
+                "food_name TEXT NOT NULL, " +
+                "calories REAL, " +
+                "fat REAL, " +
+                "protein REAL, " +
+                "carbohydrates REAL, " +
+                "fiber REAL, " +
+                "vitamins TEXT, " +
+                "minerals TEXT, " +
+                "FOREIGN KEY (meal_log_id) REFERENCES meal_log(id)" +
+                ");");
     }
 
     @Override
@@ -519,7 +533,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[]{String.valueOf(activityId), String.valueOf(userId)});
 
         if (cursor != null && cursor.moveToFirst()) {
-            Reminder reminder = new Reminder(
+            @SuppressLint("Range") Reminder reminder = new Reminder(
                     cursor.getInt(cursor.getColumnIndex("id")),
                     cursor.getInt(cursor.getColumnIndex("user_id")),
                     cursor.getInt(cursor.getColumnIndex("activity_id")),

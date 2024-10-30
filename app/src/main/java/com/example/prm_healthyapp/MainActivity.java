@@ -11,7 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
-    private Button btnGoToReport, btnAddFood;
+    private Button btnGoToReport, btnAddFood,AichatButton;
     private Button btnUserInfo;
     private Button btnActivities;
     private Button btnGoToSleepLog;
@@ -25,17 +25,22 @@ public class MainActivity extends AppCompatActivity {
 
         btnGoToReport = findViewById(R.id.btnGoToReport);
         btnAddFood = findViewById(R.id.btnAddFood);
-
+        AichatButton = findViewById(R.id.Aichat);
         btnAddFood.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showAddFoodDialog();
             }
         });
+        AichatButton.setOnClickListener(this::onActionChat);
         checkUser();
         initUI();
     }
-
+    private void onActionChat(View view) {
+        // Navigate to ReportActivity
+        Intent intent = new Intent(MainActivity.this, HealthAdviceActivity.class);
+        startActivity(intent);
+    }
     private void showAddFoodDialog() {
         Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_add_food);
