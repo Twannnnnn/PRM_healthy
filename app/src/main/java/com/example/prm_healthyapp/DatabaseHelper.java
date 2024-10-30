@@ -103,6 +103,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "user_id INTEGER, " +
                 "meal_type TEXT NOT NULL, " +
                 "food_items TEXT NOT NULL, " +
+                "food_mass TEXT NOT NULL, " +
                 "total_calories REAL, " +
                 "meal_time TEXT NOT NULL, " +
                 "log_date TEXT NOT NULL, " +
