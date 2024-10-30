@@ -14,11 +14,11 @@ import java.util.List;
 
 public class ReportActivity extends AppCompatActivity {
     DatabaseHelper dbHelper;
-    RecyclerView recyclerView;
+
     LogAdapter logAdapter;
     List<LogItem> logList;
-    private TabLayout tabLayout; // Khai báo biến tabLayout
-    private ViewPager2 viewPager; // Khai báo biến viewPager
+    TabLayout tabLayout;
+    ViewPager2 viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,25 +26,28 @@ public class ReportActivity extends AppCompatActivity {
         setContentView(R.layout.activity_report);
 
         dbHelper = new DatabaseHelper(this);
-        recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        tabLayout = findViewById(R.id.tabLayout); // Khởi tạo tabLayout
-        viewPager = findViewById(R.id.viewPager); // Khởi tạo viewPager
+
+        tabLayout = findViewById(R.id.tabLayout);
+        viewPager = findViewById(R.id.viewPager);
 
         logList = new ArrayList<>();
-        displayAllLogs(1); // Thay 1 bằng userId thực tế của bạn
+        displayAllLogs(1); // Replace 1 with the actual userId
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(this);
         viewPager.setAdapter(adapter);
 
-        new TabLayoutMediator(tabLayout, viewPager,
-                (tab, position) -> {
-                    if (position == 0) {
-                        tab.setText("Sleep Log");
-                    }
-                    // Thêm tên tab cho các fragment khác nếu cần
-                }).attach();
+        // Set up TabLayout with ViewPager2
+        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
+            switch (position) {
+                case 0:
+                    tab.setText("Sleep Log");
+                    break;
+                case 1:
+                    tab.setText("Meal Log");
+                    break;
+            }
+        }).attach();
     }
 
     private void displayAllLogs(int userId) {
@@ -68,6 +71,6 @@ public class ReportActivity extends AppCompatActivity {
         cursor.close();
 
         logAdapter = new LogAdapter(logList);
-        recyclerView.setAdapter(logAdapter);
+
     }
 }
