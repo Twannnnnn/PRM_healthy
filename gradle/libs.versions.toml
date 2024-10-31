@@ -8,7 +8,8 @@ material = "1.12.0"
 activity = "1.9.3"
 constraintlayout = "2.1.4"
 cardview = "1.0.0"
-recyclerview = "1.3.2" # Thêm dòng này cho phiên bản CardView
+recyclerview = "1.3.2"
+gridlayout = "1.0.0" # Thêm dòng này cho phiên bản CardView
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -19,7 +20,8 @@ material = { group = "com.google.android.material", name = "material", version.r
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardview" }
-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" } # Thêm dòng này cho CardView
+recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
+gridlayout = { group = "androidx.gridlayout", name = "gridlayout", version.ref = "gridlayout" } # Thêm dòng này cho CardView
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

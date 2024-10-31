@@ -13,8 +13,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
+
     private FrameLayout btnGoToReport, btnAddFood, btnUserInfo, btnGoToSleepLog, btnGoToActivities, btnAIChat;
     private DatabaseHelper dbHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
     private void onAction(View view) {
         // Navigate to ReportActivity
         Intent intent = new Intent(MainActivity.this, ReportActivity.class);
@@ -110,4 +113,20 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, SleepLogListActivity.class);
         startActivity(intent);
     }
+
+
+    private void onDietaryHabit(View view) {
+        // Navigate to UserInfoActivity
+        Intent intent = new Intent(MainActivity.this, DietaryHabit.class);
+        startActivity(intent);
+    }
+
+    private void onMealPlan(View view) {
+        // Navigate to UserInfoActivity
+        Intent intent = new Intent(MainActivity.this, MealPlan.class);
+        startActivity(intent);
+    }
+
+
+
 }
