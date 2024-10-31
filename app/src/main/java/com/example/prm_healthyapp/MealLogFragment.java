@@ -1,6 +1,7 @@
 package com.example.prm_healthyapp;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.database.Cursor;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
@@ -12,12 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,34 +54,51 @@ public class MealLogFragment extends Fragment {
         // Set item click listener
         logAdapter.setOnItemClickListener(logItem -> showNutritionalInfoDialog(logItem));
 
+        // Set up the Nutrition Total button
+        Button btnNutritionTotal = view.findViewById(R.id.btnNutritionTotal);
+        btnNutritionTotal.setOnClickListener(v -> showDateRangePicker());
+
         return view;
     }
 
     private void loadMealLogs(int userId) {
         Cursor cursor = dbHelper.getAllMealLogs(userId);
 
-        // Ensure the cursor is valid
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 try {
                     String logTime = cursor.getString(cursor.getColumnIndexOrThrow("meal_time"));
+                    String logDate = cursor.getString(cursor.getColumnIndexOrThrow("log_date")); // Retrieve log date
                     String title = cursor.getString(cursor.getColumnIndexOrThrow("meal_type"));
                     String description = cursor.getString(cursor.getColumnIndexOrThrow("food_items"));
                     String foodMass = cursor.getString(cursor.getColumnIndexOrThrow("food_mass"));
 
-                    LogItem logItem = new LogItem("Meal", logTime, title, description + " (" + foodMass + ")");
+                    // Create LogItem with all required parameters
+                    LogItem logItem = new LogItem("Meal", logTime, logDate, title, description + " (" + foodMass + ")", foodMass);
                     logList.add(logItem);
                 } catch (IllegalArgumentException e) {
                     Log.e("MealLogFragment", "Column not found: " + e.getMessage());
                 }
             } while (cursor.moveToNext());
-        }
-
-        if (cursor != null) {
             cursor.close();
         }
     }
+    private void loadSleepLogs(int userId) {
+        Cursor cursor = dbHelper.getAllSleepLogs(userId);
 
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                String sleepStart = cursor.getString(cursor.getColumnIndexOrThrow("sleep_start"));
+                String sleepEnd = cursor.getString(cursor.getColumnIndexOrThrow("sleep_end"));
+                String logDate = cursor.getString(cursor.getColumnIndexOrThrow("log_date")); // Retrieve log date
+                float duration = cursor.getFloat(cursor.getColumnIndexOrThrow("duration"));
+
+                LogItem logItem = new LogItem("Sleep", sleepStart, logDate, "Sleep Log", sleepEnd, ""); // Food mass can be empty for sleep logs
+                logList.add(logItem);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+    }
     private void showNutritionalInfoDialog(LogItem logItem) {
         // Inflate the dialog layout
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_meal_log_details, null);
@@ -102,7 +121,7 @@ public class MealLogFragment extends Fragment {
 
     private void fetchNutritionalInfo(LogItem logItem, TextView tvNutritionalInfo) {
         String foodItems = logItem.getDescription(); // This contains food items
-        String foodMass = "100"; // Replace with actual mass if available
+        String foodMass = logItem.getFoodMass(); // Replace with actual mass if available
 
         // Initialize your Retrofit service
         Retrofit retrofit = new Retrofit.Builder()
@@ -152,5 +171,98 @@ public class MealLogFragment extends Fragment {
                 // Handle failure
             }
         });
+    }
+
+    private void showDateRangePicker() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_date_range, null);
+        builder.setView(dialogView);
+
+        EditText etStartDate = dialogView.findViewById(R.id.etStartDate);
+        EditText etEndDate = dialogView.findViewById(R.id.etEndDate);
+        Button btnCalculate = dialogView.findViewById(R.id.btnCalculate);
+        Button btnClose = dialogView.findViewById(R.id.btnClose);
+
+        AlertDialog dialog = builder.create();
+
+        etStartDate.setOnClickListener(v -> showDatePicker(etStartDate));
+        etEndDate.setOnClickListener(v -> showDatePicker(etEndDate));
+
+        btnCalculate.setOnClickListener(v -> {
+            String startDate = etStartDate.getText().toString();
+            String endDate = etEndDate.getText().toString();
+            if (!startDate.isEmpty() && !endDate.isEmpty()) {
+                calculateNutritionTotal(startDate, endDate);
+                dialog.dismiss();
+            } else {
+                Toast.makeText(getContext(), "Please select both dates", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        btnClose.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
+    }
+
+    private void showDatePicker(EditText editText) {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), (view, selectedYear, selectedMonth, selectedDay) -> {
+            String date = selectedYear + "-" + (selectedMonth + 1) + "-" + selectedDay;
+            editText.setText(date);
+        }, year, month, day);
+        datePickerDialog.show();
+    }
+    @SuppressLint("Range")
+    private void calculateNutritionTotal(String startDate, String endDate) {
+        // Set default date range to one day if no arguments are provided
+        if (startDate.isEmpty() || endDate.isEmpty()) {
+            Calendar calendar = Calendar.getInstance();
+            endDate = String.format("%d-%02d-%02d", calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH) + 1,
+                    calendar.get(Calendar.DAY_OF_MONTH));
+            calendar.add(Calendar.DAY_OF_MONTH, -1); // Subtract one day for start date
+            startDate = String.format("%d-%02d-%02d", calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH) + 1,
+                    calendar.get(Calendar.DAY_OF_MONTH));
+        }
+
+        Cursor cursor = dbHelper.getAllMealLogs(1); // Replace with actual userId
+
+        float totalCalories = 0;
+        float totalProtein = 0;
+        float totalFat = 0;
+        float totalCarbohydrates = 0;
+
+        while (cursor.moveToNext()) {
+            String mealLogDate = cursor.getString(cursor.getColumnIndex("log_date"));
+            if (isDateInRange(mealLogDate, startDate, endDate)) {
+                totalCalories += cursor.getFloat(cursor.getColumnIndex("total_calories"));
+                // Assuming you have these columns in your meal_log table
+                totalProtein += cursor.getFloat(cursor.getColumnIndex("total_protein")); // Add protein column
+                totalFat += cursor.getFloat(cursor.getColumnIndex("total_fat")); // Add fat column
+                totalCarbohydrates += cursor.getFloat(cursor.getColumnIndex("total_carbohydrates")); // Add carbs column
+            }
+        }
+        cursor.close();
+
+        String resultMessage = String.format("Total Calories: %.2f\nTotal Protein: %.2f g\nTotal Fat: %.2f g\nTotal Carbohydrates: %.2f g",
+                totalCalories, totalProtein, totalFat, totalCarbohydrates);
+        showResultDialog(resultMessage);
+    }
+
+    private boolean isDateInRange(String logDate, String startDate, String endDate) {
+        return logDate.compareTo(startDate) >= 0 && logDate.compareTo(endDate) <= 0;
+    }
+
+    private void showResultDialog(String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Nutrition Total")
+                .setMessage(message)
+                .setPositiveButton("OK", null)
+                .show();
     }
 }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector android:name="ImageButtonStyle" xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:name="android:layout_width">0dp</item>
+    <item android:name="android:layout_height">wrap_content</item>
+    <item android:name="android:layout_gravity">center</item>
+    <item android:name="android:background">?attr/selectableItemBackground</item>
+    <item android:name="android:textColor">#FFFFFF</item>
+    <item android:name="android:padding">16dp</item>
+    <item android:name="android:gravity">center</item>
+    <item android:name="android:textSize">16sp</item>
+</selector>

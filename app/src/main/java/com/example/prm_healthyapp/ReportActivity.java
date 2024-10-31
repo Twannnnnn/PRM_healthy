@@ -27,7 +27,6 @@ public class ReportActivity extends AppCompatActivity {
 
         dbHelper = new DatabaseHelper(this);
 
-
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
 
@@ -54,23 +53,27 @@ public class ReportActivity extends AppCompatActivity {
         Cursor cursor = dbHelper.getAllLogs(userId);
         while (cursor.moveToNext()) {
             int logTypeIndex = cursor.getColumnIndex("log_type");
+            int logDateIndex = cursor.getColumnIndex("log_date");
             int logTimeIndex = cursor.getColumnIndex("log_time");
             int titleIndex = cursor.getColumnIndex("title");
             int descriptionIndex = cursor.getColumnIndex("description");
 
-            if (logTypeIndex != -1 && logTimeIndex != -1 && titleIndex != -1 && descriptionIndex != -1) {
+            if (logTypeIndex != -1 && logTimeIndex != -1 && logDateIndex != -1
+                    && titleIndex != -1 && descriptionIndex != -1) {
                 String logType = cursor.getString(logTypeIndex);
+                String logDate = cursor.getString(logDateIndex);
                 String logTime = cursor.getString(logTimeIndex);
                 String title = cursor.getString(titleIndex);
                 String description = cursor.getString(descriptionIndex);
 
-                LogItem logItem = new LogItem(logType, logTime, title, description);
+                // Create LogItem with all required parameters
+                LogItem logItem = new LogItem(logType, logTime, logDate, title, description, ""); // Food mass can be empty for sleep logs
                 logList.add(logItem);
             }
         }
         cursor.close();
 
         logAdapter = new LogAdapter(logList);
-
+        // Set adapter to the RecyclerView (assuming it's done in the fragment)
     }
 }

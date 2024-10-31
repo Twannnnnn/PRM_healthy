@@ -37,12 +37,14 @@
                 android:paddingBottom="12dp"
                 android:layout_marginBottom="8dp"/>
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
+                android:padding="12dp"
+                android:background="@drawable/button_background"
                 android:id="@+id/btnAddSleepLog"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Add Sleep Log"
-                android:background="#2196F3"
+
                 android:textColor="@android:color/white" />
 
             <androidx.recyclerview.widget.RecyclerView

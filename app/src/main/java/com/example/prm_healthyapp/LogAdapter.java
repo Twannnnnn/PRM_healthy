@@ -30,6 +30,8 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.LogViewHolder> {
         LogItem logItem = logList.get(position);
         holder.tvLogType.setText(logItem.getLogType());
         holder.tvLogTime.setText(logItem.getLogTime());
+        holder.tvLogDate.setText(logItem.getLogDate());
+
         holder.tvTitle.setText(logItem.getTitle());
         holder.tvDescription.setText(logItem.getDescription());
 
@@ -47,11 +49,14 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.LogViewHolder> {
     }
 
     public static class LogViewHolder extends RecyclerView.ViewHolder {
-        TextView tvLogType, tvLogTime, tvTitle, tvDescription;
+        TextView tvLogType, tvLogDate, tvLogTime, tvTitle, tvDescription;
 
         public LogViewHolder(@NonNull View itemView) {
             super(itemView);
             tvLogType = itemView.findViewById(R.id.tvLogType);
+            tvLogDate = itemView.findViewById(R.id.tvLogDate);
+
+
             tvLogTime = itemView.findViewById(R.id.tvLogTime);
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvDescription = itemView.findViewById(R.id.tvDescription);

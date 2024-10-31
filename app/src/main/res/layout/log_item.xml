@@ -24,7 +24,12 @@
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="#2196F3" />
-
+        <TextView
+            android:id="@+id/tvLogDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="#888888"/> <!-- Light color for date -->
         <!-- Thời gian -->
         <TextView
             android:id="@+id/tvLogTime"
