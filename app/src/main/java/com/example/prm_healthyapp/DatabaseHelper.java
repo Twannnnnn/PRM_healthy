@@ -7,6 +7,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "health_management.db";
     private static final int DATABASE_VERSION = 16;
@@ -156,6 +159,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+        if (oldVersion < 12) {
+            db.execSQL("ALTER TABLE food ADD COLUMN total_calories REAL;");
+        }
+
+        if (oldVersion < 12) {
+            db.execSQL("ALTER TABLE food ADD COLUMN quantity INTEGER;");
+        }
         // Xóa bảng cũ nếu tồn tại và tạo lại
         db.execSQL("DROP TABLE IF EXISTS user_disease");
         db.execSQL("DROP TABLE IF EXISTS disease");
@@ -618,6 +629,132 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete("reminders", "id = ?", new String[]{String.valueOf(id)});
         db.close();
+    }
+
+    public double getBreakfastCalories(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        double totalCalories = 0.0;
+        String query = "SELECT SUM(total_calories) FROM meal_log WHERE meal_type = ? AND user_id = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[] {"Breakfast", String.valueOf(userId)});
+        if (cursor.moveToFirst()) {
+            totalCalories = cursor.getDouble(0);  // Get the sum of calories
+        }
+        cursor.close();
+        db.close();
+        return totalCalories;
+    }
+
+    public double getAfternoonCalories(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        double totalCalories = 0.0;
+        String query = "SELECT SUM(total_calories) FROM meal_log WHERE meal_type = ? AND user_id = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[] {"Afternoon", String.valueOf(userId)});
+        if (cursor.moveToFirst()) {
+            totalCalories = cursor.getDouble(0);  // Get the sum of calories
+        }
+        cursor.close();
+        db.close();
+        return totalCalories;
+    }
+
+    public double getLunchCalories(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        double totalCalories = 0.0;
+        String query = "SELECT SUM(total_calories) FROM meal_log WHERE meal_type = ? AND user_id = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[] {"Lunch", String.valueOf(userId)});
+        if (cursor.moveToFirst()) {
+            totalCalories = cursor.getDouble(0);  // Get the sum of calories
+        }
+        cursor.close();
+        db.close();
+        return totalCalories;
+    }
+
+    public double getDinnerCalories(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        double totalCalories = 0.0;
+        String query = "SELECT SUM(total_calories) FROM meal_log WHERE meal_type = ? AND user_id = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[] {"Dinner", String.valueOf(userId)});
+        if (cursor.moveToFirst()) {
+            totalCalories = cursor.getDouble(0);  // Get the sum of calories
+        }
+        cursor.close();
+        db.close();
+        return totalCalories;
+    }
+
+    public void insertMealLog(int userId, String mealType, String foodItems,String foodMass, double totalCalories, String mealTime, String logDate) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("user_id", userId);
+        values.put("meal_type", mealType);
+        values.put("food_items", foodItems);
+        values.put("food_mass", foodMass);
+        values.put("total_calories", totalCalories);
+        values.put("meal_time", mealTime);
+        values.put("log_date", logDate);
+
+        db.insert("meal_log", null, values);
+        db.close();
+    }
+
+    // Method to retrieve all FoodItem objects
+    public List<FoodItem> getAllFoodItems() {
+        List<FoodItem> foodItems = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM food", null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                FoodItem foodItem = new FoodItem(
+                        cursor.getInt(cursor.getColumnIndex("id")),
+                        cursor.getString(cursor.getColumnIndex("name")),
+                        cursor.getDouble(cursor.getColumnIndex("fat")),
+                        cursor.getDouble(cursor.getColumnIndex("protein")),
+                        cursor.getDouble(cursor.getColumnIndex("carbohydrates")),
+                        cursor.getDouble(cursor.getColumnIndex("fiber")),
+                        cursor.getString(cursor.getColumnIndex("vitamins")),
+                        cursor.getString(cursor.getColumnIndex("minerals")),
+                        cursor.getDouble(cursor.getColumnIndex("total_calories")),
+                        cursor.getInt(cursor.getColumnIndex("quantity"))
+                );
+                foodItems.add(foodItem);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return foodItems;
+    }
+
+    public boolean insertMealPlan(int userId, String mealType, String foodItems, double calories, String planDate) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("user_id", userId);
+        values.put("meal_type", mealType);
+        values.put("planned_food_items", foodItems); // Lưu danh sách món ăn đã chọn
+        values.put("planned_calories", calories);
+        values.put("plan_date", planDate);
+
+        long result = db.insert("meal_plan", null, values);
+        return result != -1;
+    }
+    public boolean checkMealPlanExists(int userId, String mealType, String planDate) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT COUNT(*) FROM meal_plan WHERE user_id = ? AND meal_type = ? AND plan_date = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(userId), mealType, planDate});
+
+        boolean exists = false;
+        if (cursor != null) {
+            cursor.moveToFirst();
+            int count = cursor.getInt(0);
+            exists = (count > 0);
+            cursor.close();
+        }
+        return exists;
     }
 
 }
