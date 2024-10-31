@@ -40,14 +40,21 @@ public class SleepLogFragment extends Fragment {
     private void loadSleepLogs(int userId) {
         Cursor cursor = dbHelper.getAllSleepLogs(userId);
         while (cursor.moveToNext()) {
-            @SuppressLint("Range") String logTime = cursor.getString(cursor.getColumnIndex("sleep_start"));
-            String title = "Sleep Log"; // You can customize the title as needed
-            @SuppressLint("Range") String description = "Ended at: " + cursor.getString(cursor.getColumnIndex("sleep_end"));
+            @SuppressLint("Range") String sleepStart = cursor.getString(cursor.getColumnIndex("sleep_start"));
+            @SuppressLint("Range") String sleepEnd = cursor.getString(cursor.getColumnIndex("sleep_end"));
+            @SuppressLint("Range") String logDate = cursor.getString(cursor.getColumnIndex("log_date")); // Retrieve log date
             @SuppressLint("Range") float duration = cursor.getFloat(cursor.getColumnIndex("duration"));
 
-            LogItem logItem = new LogItem("Sleep", logTime, title + " - Duration: " + duration, description);
+            String title = "Sleep Log"; // You can customize the title as needed
+            String description = "Ended at: " + sleepEnd + "\nDuration: " + duration + " hours";
+
+            // Create LogItem with all required parameters
+            LogItem logItem = new LogItem("Sleep", sleepStart, logDate, title, description, ""); // Food mass can be empty for sleep logs
             logList.add(logItem);
         }
-        cursor.close();
+
+        if (cursor != null) {
+            cursor.close();
+        }
     }
 }

@@ -13,27 +13,33 @@
         android:textSize="16sp"
         android:textColor="#000000" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
+        android:padding="12dp"
+        android:background="@drawable/button_background"
         android:id="@+id/btnUpdate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Update"
-        android:background="#2196F3"
+
         android:textColor="@android:color/white" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
+        android:padding="12dp"
+        android:background="@drawable/button_background"
         android:id="@+id/btnDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Delete"
-        android:background="#2196F3"
+
         android:textColor="@android:color/white" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
+        android:padding="12dp"
+        android:background="@drawable/button_background"
         android:id="@+id/btnSetReminder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Set Reminder"
-        android:background="#2196F3"
+
         android:textColor="@android:color/white" />
 </LinearLayout>

@@ -20,7 +20,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewResult" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
+        android:padding="12dp"
+        android:background="@drawable/button_background"
         android:id="@+id/buttonPredict"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

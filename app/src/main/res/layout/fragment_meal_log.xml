@@ -6,8 +6,21 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="This is the Meal Log tab."
+        android:text="All Meal Records."
         android:textSize="20sp"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:padding="12dp"
+
+        android:id="@+id/btnNutritionTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_background"
+
+        android:text="Nutrition Total"
+        android:backgroundTint="@null"/> <!-- Set the background -->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -15,4 +28,5 @@
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:nestedScrollingEnabled="false"/>
+
 </LinearLayout>

@@ -39,7 +39,9 @@
         android:hint="Chất xơ (grams)"
         android:inputType="numberDecimal" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
+        android:padding="12dp"
+        android:background="@drawable/button_background"
         android:id="@+id/buttonSaveFood"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

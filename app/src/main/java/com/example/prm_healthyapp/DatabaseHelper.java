@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "health_management.db";
-    private static final int DATABASE_VERSION = 12;
+    private static final int DATABASE_VERSION = 16;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -105,6 +105,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "food_items TEXT NOT NULL, " +
                 "food_mass TEXT NOT NULL, " +
                 "total_calories REAL, " +
+                "total_protein REAL, " + // Add this line
+                "total_fat REAL, " + // Add this line
+                "total_carbohydrates REAL, " + // Add this line
                 "meal_time TEXT NOT NULL, " +
                 "log_date TEXT NOT NULL, " +
                 "FOREIGN KEY (user_id) REFERENCES users(id))");
@@ -548,35 +551,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return null;
     }
     private void addDemoData(SQLiteDatabase db) {
-        // Add demo users
-        for (int i = 1; i <= 10; i++) {
+
             ContentValues userValues = new ContentValues();
-            userValues.put("name", "User " + i);
-            userValues.put("email", "user" + i + "@example.com");
-            userValues.put("password", "password" + i);
-            userValues.put("age", 20 + i);
-            userValues.put("gender", (i % 2 == 0) ? "Male" : "Female");
-            userValues.put("weight", 60 + (i * 2));
-            userValues.put("height", 150 + (i * 3));
+            userValues.put("name", "User ");
+            userValues.put("email", "user@example.com");
+            userValues.put("password", "password" );
+            userValues.put("age", 20 );
+            userValues.put("gender",  "Male" );
+            userValues.put("weight", 60 );
+            userValues.put("height", 150 );
             db.insert("users", null, userValues);
-        }
+
 
         // Manually add meal logs
-        addMealLog(db, 1, "Breakfast", "Eggs, Bread", "150g", 300, "08:00", "2024-10-30");
-        addMealLog(db, 1, "Lunch", "Chicken, Rice", "200g", 500, "12:00", "2024-10-30");
-        addMealLog(db, 1, "Dinner", "Fish, Salad", "250g", 400, "18:00", "2024-10-30");
-        addMealLog(db, 2, "Breakfast", "Pasta, Cheese", "180g", 350, "07:30", "2024-10-30");
-        addMealLog(db, 2, "Lunch", "Apples, Yogurt", "160g", 250, "12:30", "2024-10-30");
-        addMealLog(db, 3, "Dinner", "Nuts, Bananas", "100g", 200, "19:00", "2024-10-30");
-        addMealLog(db, 4, "Snack", "Tomatoes, Garlic", "120g", 150, "15:00", "2024-10-30");
-        addMealLog(db, 5, "Lunch", "Carrots, Broccoli", "140g", 220, "12:15", "2024-10-30");
-        addMealLog(db, 6, "Dinner", "Peppers, Onions", "170g", 300, "18:45", "2024-10-30");
-        addMealLog(db, 7, "Breakfast", "Spinach, Yogurt", "130g", 200, "09:00", "2024-10-30");
+        addMealLog(db, 1, "Breakfast", "Eggs, Bread", "150g", 300, "08:00", "2024-10-29");
+        addMealLog(db, 1, "Lunch", "Chicken, Rice", "200g", 500, "12:00", "2024-10-28");
+        addMealLog(db, 1, "Dinner", "Fish, Salad", "250g", 400, "18:00", "2024-10-28");
+        addMealLog(db, 1, "Breakfast", "Pasta, Cheese", "180g", 350, "07:30", "2024-10-27");
+        addMealLog(db, 1, "Lunch", "Apples, Yogurt", "160g", 250, "12:30", "2024-10-27");
+        addMealLog(db, 1, "Dinner", "Nuts, Bananas", "100g", 200, "19:00", "2024-10-27");
+        addMealLog(db, 1, "Snack", "Tomatoes, Garlic", "120g", 150, "15:00", "2024-10-26");
+        addMealLog(db, 1, "Lunch", "Carrots, Broccoli", "140g", 220, "12:15", "2024-10-26");
+        addMealLog(db, 1, "Dinner", "Peppers, Onions", "170g", 300, "18:45", "2024-10-26");
+        addMealLog(db, 1, "Breakfast", "Spinach, Yogurt", "130g", 200, "09:00", "2024-10-25");
 
         // Add demo sleep logs
         addSleepLog(db, 1, "22:00", "06:00", 8.0f, "2024-10-30");
-        addSleepLog(db, 2, "23:00", "07:00", 8.0f, "2024-10-30");
-        addSleepLog(db, 3, "21:30", "05:30", 8.0f, "2024-10-30");
+        addSleepLog(db, 1, "23:00", "07:00", 8.0f, "2024-10-30");
+        addSleepLog(db, 1, "21:30", "05:30", 8.0f, "2024-10-30");
         // Continue adding sleep logs as needed...
     }
 
