@@ -725,4 +725,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return foodItems;
     }
 
+    public boolean insertMealPlan(int userId, String mealType, String foodItems, double calories, String planDate) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("user_id", userId);
+        values.put("meal_type", mealType);
+        values.put("planned_food_items", foodItems); // Lưu danh sách món ăn đã chọn
+        values.put("planned_calories", calories);
+        values.put("plan_date", planDate);
+
+        long result = db.insert("meal_plan", null, values);
+        return result != -1;
+    }
+    public boolean checkMealPlanExists(int userId, String mealType, String planDate) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT COUNT(*) FROM meal_plan WHERE user_id = ? AND meal_type = ? AND plan_date = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(userId), mealType, planDate});
+
+        boolean exists = false;
+        if (cursor != null) {
+            cursor.moveToFirst();
+            int count = cursor.getInt(0);
+            exists = (count > 0);
+            cursor.close();
+        }
+        return exists;
+    }
+
 }

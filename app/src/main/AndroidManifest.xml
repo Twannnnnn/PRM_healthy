@@ -18,6 +18,12 @@
         android:theme="@style/Theme.PRM_HealthyApp"
         tools:targetApi="31">
         <activity
+            android:name=".AddMealPlanActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MealPlan"
+            android:exported="false" />
+        <activity
             android:name=".AddDinnerActivity"
             android:exported="false" />
         <activity
