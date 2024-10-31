@@ -2,7 +2,10 @@ package com.example.prm_healthyapp;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,6 +39,7 @@ public class MealLogFragment extends Fragment {
     private List<LogItem> logList;
     private DatabaseHelper dbHelper;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -44,7 +48,7 @@ public class MealLogFragment extends Fragment {
         dbHelper = new DatabaseHelper(getActivity());
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
+        dbHelper = new DatabaseHelper(getActivity());
         logList = new ArrayList<>();
         loadMealLogs(1); // Replace 1 with the actual userId
 
@@ -216,53 +220,129 @@ public class MealLogFragment extends Fragment {
         }, year, month, day);
         datePickerDialog.show();
     }
-    @SuppressLint("Range")
-    private void calculateNutritionTotal(String startDate, String endDate) {
-        // Set default date range to one day if no arguments are provided
-        if (startDate.isEmpty() || endDate.isEmpty()) {
-            Calendar calendar = Calendar.getInstance();
-            endDate = String.format("%d-%02d-%02d", calendar.get(Calendar.YEAR),
-                    calendar.get(Calendar.MONTH) + 1,
-                    calendar.get(Calendar.DAY_OF_MONTH));
-            calendar.add(Calendar.DAY_OF_MONTH, -1); // Subtract one day for start date
-            startDate = String.format("%d-%02d-%02d", calendar.get(Calendar.YEAR),
-                    calendar.get(Calendar.MONTH) + 1,
-                    calendar.get(Calendar.DAY_OF_MONTH));
-        }
-
-        Cursor cursor = dbHelper.getAllMealLogs(1); // Replace with actual userId
-
+    // Tạo một lớp để lưu trữ các giá trị tổng
+    class NutritionTotals {
         float totalCalories = 0;
         float totalProtein = 0;
         float totalFat = 0;
         float totalCarbohydrates = 0;
+    }
+    @SuppressLint("Range")
 
+
+// Trong phương thức calculateNutritionTotal
+    private void calculateNutritionTotal(String startDate, String endDate) {
+        Cursor cursor = dbHelper.getAllMealLogs(1); // Thay thế bằng userId thực tế
+
+        // Tạo đối tượng NutritionTotals để lưu trữ tổng
+        NutritionTotals totals = new NutritionTotals();
+
+        List<String> foodItemsList = new ArrayList<>();
+
+        // Lấy danh sách món ăn như trước
         while (cursor.moveToNext()) {
             String mealLogDate = cursor.getString(cursor.getColumnIndex("log_date"));
             if (isDateInRange(mealLogDate, startDate, endDate)) {
-                totalCalories += cursor.getFloat(cursor.getColumnIndex("total_calories"));
-                // Assuming you have these columns in your meal_log table
-                totalProtein += cursor.getFloat(cursor.getColumnIndex("total_protein")); // Add protein column
-                totalFat += cursor.getFloat(cursor.getColumnIndex("total_fat")); // Add fat column
-                totalCarbohydrates += cursor.getFloat(cursor.getColumnIndex("total_carbohydrates")); // Add carbs column
+                String foodItems = cursor.getString(cursor.getColumnIndex("food_items"));
+                foodItemsList.add(foodItems); // Thêm vào danh sách
             }
         }
         cursor.close();
 
-        String resultMessage = String.format("Total Calories: %.2f\nTotal Protein: %.2f g\nTotal Fat: %.2f g\nTotal Carbohydrates: %.2f g",
-                totalCalories, totalProtein, totalFat, totalCarbohydrates);
-        showResultDialog(resultMessage);
+        // Gọi Nutrition API với danh sách món ăn
+        for (String foodItems : foodItemsList) {
+            fetchNutritionalInfoFromApi(foodItems, (calories, protein, fat, carbohydrates) -> {
+                totals.totalCalories += calories;
+                totals.totalProtein += protein;
+                totals.totalFat += fat;
+                totals.totalCarbohydrates += carbohydrates;
+
+                // Sau khi tính toán, hiển thị kết quả
+                String resultMessage = String.format("Total Calories: %.2f\nTotal Protein: %.2f g\nTotal Fat: %.2f g\nTotal Carbohydrates: %.2f g",
+                        totals.totalCalories, totals.totalProtein, totals.totalFat, totals.totalCarbohydrates);
+                showResultDialog(resultMessage);
+            });
+        }
+    }
+    private void fetchNutritionalInfoFromApi(String foodItems, NutritionalDataCallback callback) {
+        // Khởi tạo Retrofit và gọi API để lấy thông tin dinh dưỡng
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://trackapi.nutritionix.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        NutritionixApiService nutritionixApiService = retrofit.create(NutritionixApiService.class);
+
+        Map<String, String> options = new HashMap<>();
+        options.put("query", foodItems);
+
+        // Thay thế với mã API của bạn
+        Call<Map<String, Object>> call = nutritionixApiService.getNutritionalInfo(options);
+        call.enqueue(new Callback<Map<String, Object>>() {
+            @Override
+            public void onResponse(Call<Map<String, Object>> call, Response<Map<String, Object>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<Map<String, Object>> foods = (List<Map<String, Object>>) response.body().get("foods");
+                    for (Map<String, Object> food : foods) {
+                        // Sử dụng Double thay vì Float
+                        double calories = (double) food.get("nf_calories");
+                        double protein = (double) food.get("nf_protein");
+                        double fat = (double) food.get("nf_total_fat");
+                        double carbohydrates = (double) food.get("nf_total_carbohydrate");
+
+                        // Gọi lại callback với dữ liệu
+                        callback.onNutritionalDataReceived((float) calories, (float) protein, (float) fat, (float) carbohydrates);
+                    }
+                } else {
+                    Log.e("Nutrition API", "Failed to retrieve nutritional info");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Map<String, Object>> call, Throwable t) {
+                Log.e("Nutrition API", "Error: " + t.getMessage());
+            }
+        });
     }
 
+    // Interface callback để nhận dữ liệu dinh dưỡng
+    interface NutritionalDataCallback {
+        void onNutritionalDataReceived(float calories, float protein, float fat, float carbohydrates);
+    }
+    private void someMethodWhereYouAddMealLog(int userId, String mealType, String foodItems, float totalCalories, float totalProtein, float totalFat, float totalCarbohydrates) {
+        // Gọi phương thức addMealLog từ DatabaseHelper
+        dbHelper.addMealLog(userId, mealType, foodItems, totalCalories, totalProtein, totalFat, totalCarbohydrates, "meal_time_placeholder", "log_date_placeholder");
+    }
     private boolean isDateInRange(String logDate, String startDate, String endDate) {
         return logDate.compareTo(startDate) >= 0 && logDate.compareTo(endDate) <= 0;
     }
+    private String createAdviceRequest(User user) {
+        StringBuilder requestBuilder = new StringBuilder();
+        requestBuilder.append("User Information:\n")
+                .append("Name: ").append(user.getName()).append("\n")
+                .append("Age: ").append(user.getAge()).append("\n")
+                .append("Weight: ").append(user.getWeight()).append("\n")
+                .append("Height: ").append(user.getHeight()).append("\n");
 
+        return requestBuilder.toString();
+    }
     private void showResultDialog(String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Nutrition Total")
                 .setMessage(message)
                 .setPositiveButton("OK", null)
+                .setNegativeButton("Get Advice", (dialog, which) -> {
+                    User user = dbHelper.getFirstUser(); // Lấy người dùng đầu tiên
+                    if (user != null) {
+                        String adviceRequest = createAdviceRequest(user); // Gọi phương thức ở đây
+                        // Sử dụng Intent để chuyển đến HealthAdviceActivityLlama
+                        Intent intent = new Intent(getActivity(), HealthAdviceActivityLlama.class);
+                        intent.putExtra("adviceRequest", adviceRequest); // Truyền yêu cầu vào Intent
+                        startActivity(intent); // Mở Activity mới
+                    } else {
+                        Toast.makeText(getContext(), "User not found.", Toast.LENGTH_SHORT).show();
+                    }
+                })
                 .show();
     }
 }

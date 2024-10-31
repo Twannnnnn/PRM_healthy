@@ -231,13 +231,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.delete("users", "id = ?", new String[]{String.valueOf(id)});
         db.close();
     }
-    public void addMealLog(int userId, String mealType, String foodItems, float totalCalories, String mealTime, String logDate) {
+    public void addMealLog(int userId, String mealType, String foodItems, float totalCalories, float totalProtein, float totalFat, float totalCarbohydrates, String mealTime, String logDate) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("user_id", userId);
         values.put("meal_type", mealType);
         values.put("food_items", foodItems);
         values.put("total_calories", totalCalories);
+        values.put("total_protein", totalProtein); // Thêm protein
+        values.put("total_fat", totalFat); // Thêm chất béo
+        values.put("total_carbohydrates", totalCarbohydrates); // Thêm carbohydrate
         values.put("meal_time", mealTime);
         values.put("log_date", logDate);
         db.insert("meal_log", null, values);

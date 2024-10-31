@@ -1,4 +1,4 @@
-package com.example.prm_healthyapp; // Thay đổi theo package của bạn
+package com.example.prm_healthyapp;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,40 +16,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.util.HashMap;
-
-
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import androidx.appcompat.app.AppCompatActivity;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
-import java.util.HashMap;
-import java.util.Map;
-
-
-
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import androidx.appcompat.app.AppCompatActivity;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class HealthAdviceActivity extends AppCompatActivity {
@@ -92,9 +59,9 @@ public class HealthAdviceActivity extends AppCompatActivity {
             public void onResponse(Call<Map<String, Object>> call, Response<Map<String, Object>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Map<String, Object> nutritionData = response.body();
-                    textViewResult.setText("Nutritional Info:\n" + nutritionData.toString());
+                    formatNutritionalInfo(nutritionData);
 
-                    // Lưu thông tin dinh dưỡng vào nutrition_log
+                    // Save information to the nutrition log
                     saveNutritionLog(nutritionData);
                 } else {
                     handleError(response);
@@ -109,24 +76,62 @@ public class HealthAdviceActivity extends AppCompatActivity {
         });
     }
 
+    private void formatNutritionalInfo(Map<String, Object> nutritionData) {
+        StringBuilder formattedInfo = new StringBuilder();
+        formattedInfo.append("Nutritional Info:\n");
+
+        if (nutritionData.containsKey("foods")) {
+            List<Map<String, Object>> foods = (List<Map<String, Object>>) nutritionData.get("foods");
+
+            if (foods.isEmpty()) {
+                formattedInfo.append("No nutritional data found for the specified food.\n");
+            } else {
+                for (Map<String, Object> food : foods) {
+                    formattedInfo.append("Food Name: ").append(food.get("food_name")).append("\n");
+                    formattedInfo.append("Quantity: ").append(food.get("serving_qty")).append("\n");
+                    formattedInfo.append("Mass: ").append(food.get("serving_qty"));
+                    formattedInfo.append(" ").append(food.get("serving_unit")).append("\n");
+                    formattedInfo.append("Calories: ").append(food.get("nf_calories")).append(" kcal\n");
+                    formattedInfo.append("Protein: ").append(food.get("nf_protein")).append(" g\n");
+                    formattedInfo.append("Fat: ").append(food.get("nf_total_fat")).append(" g\n");
+                    formattedInfo.append("Sodium: ").append(food.get("nf_sodium")).append(" g\n");
+                    formattedInfo.append("Cholesterol: ").append(food.get("nf_cholesterol")).append(" g\n");
+                    formattedInfo.append("Potassium: ").append(food.get("nf_potassium")).append(" g\n");
+                    formattedInfo.append("Sugars: ").append(food.get("nf_sugars")).append(" g\n");
+                    formattedInfo.append("Saturated Fat: ").append(food.get("nf_saturated_fat")).append(" g\n");
+                    formattedInfo.append("Carbohydrates: ").append(food.get("nf_total_carbohydrate")).append(" g\n");
+                    formattedInfo.append("\n"); // Add a line break between different foods
+                }
+            }
+        } else if (nutritionData.containsKey("message")) {
+            // Handle specific error messages returned from the API
+            String errorMessage = (String) nutritionData.get("message");
+            formattedInfo.append("Error: ").append(errorMessage).append("\n");
+        } else {
+            formattedInfo.append("No nutritional data found.\n");
+        }
+
+        textViewResult.setText(formattedInfo.toString());
+    }
+
     private void saveNutritionLog(Map<String, Object> nutritionData) {
         SQLiteDatabase db = new DatabaseHelper(this).getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        // Giả sử bạn đã lấy được tất cả các thông tin cần thiết từ nutritionData
-        // Đây là ví dụ, bạn cần điều chỉnh theo cấu trúc của nutritionData
-        values.put("food_name", (String) nutritionData.get("food_name")); // Chỉnh sửa theo đúng key
-        values.put("calories", (Float) nutritionData.get("calories")); // Chỉnh sửa theo đúng key
-        values.put("fat", (Float) nutritionData.get("fat")); // Chỉnh sửa theo đúng key
-        values.put("protein", (Float) nutritionData.get("protein")); // Chỉnh sửa theo đúng key
-        values.put("carbohydrates", (Float) nutritionData.get("carbohydrates")); // Chỉnh sửa theo đúng key
-        values.put("fiber", (Float) nutritionData.get("fiber")); // Chỉnh sửa theo đúng key
-        values.put("vitamins", (String) nutritionData.get("vitamins")); // Chỉnh sửa theo đúng key
-        values.put("minerals", (String) nutritionData.get("minerals")); // Chỉnh sửa theo đúng key
+        // Assuming you have extracted all necessary information from nutritionData
+        values.put("food_name", (String) nutritionData.get("food_name")); // Adjust key as needed
+        values.put("calories", (Float) nutritionData.get("calories")); // Adjust key as needed
+        values.put("fat", (Float) nutritionData.get("fat")); // Adjust key as needed
+        values.put("protein", (Float) nutritionData.get("protein")); // Adjust key as needed
+        values.put("carbohydrates", (Float) nutritionData.get("carbohydrates")); // Adjust key as needed
+        values.put("fiber", (Float) nutritionData.get("fiber")); // Adjust key as needed
+        values.put("vitamins", (String) nutritionData.get("vitamins")); // Adjust key as needed
+        values.put("minerals", (String) nutritionData.get("minerals")); // Adjust key as needed
 
         db.insert("nutrition_log", null, values);
         db.close();
     }
+
     private void handleError(Response<Map<String, Object>> response) {
         try {
             String errorResponse = response.errorBody().string();
@@ -138,87 +143,3 @@ public class HealthAdviceActivity extends AppCompatActivity {
         }
     }
 }
-//public class HealthAdviceActivity extends AppCompatActivity {
-//    private EditText editTextInput;
-//    private Button buttonPredict;
-//    private TextView textViewResult;
-//
-//    private HuggingFaceApiService huggingFaceApiService;
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_health_advice);
-//
-//        editTextInput = findViewById(R.id.editTextInput);
-//        buttonPredict = findViewById(R.id.buttonPredict);
-//        textViewResult = findViewById(R.id.textViewResult);
-//
-//        // Khởi tạo Retrofit
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl("https://api-inference.huggingface.co/models/google-bert/bert-base-uncased/") // Đảm bảo có dấu gạch chéo ở cuối
-//                .addConverterFactory(GsonConverterFactory.create())
-//                .build();
-//
-//        huggingFaceApiService = retrofit.create(HuggingFaceApiService.class);
-//
-//        buttonPredict.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String inputText = editTextInput.getText().toString();
-//                makePrediction(inputText);
-//            }
-//        });
-//    }
-//
-//    private void makePrediction(String text) {
-//        // Kiểm tra xem văn bản có chứa token [MASK] không
-//        if (!text.contains("[MASK]")) {
-//            text = "The answer to the universe is [MASK]."; // Ví dụ về câu có token
-//        }
-//
-//        HashMap<String, String> inputData = new HashMap<>();
-//        inputData.put("inputs", text);
-//
-//        huggingFaceApiService.getPrediction(inputData).enqueue(new Callback<HashMap<String, Object>>() {
-//            @Override
-//            public void onResponse(Call<HashMap<String, Object>> call, Response<HashMap<String, Object>> response) {
-//                if (response.isSuccessful() && response.body() != null) {
-//                    // In ra phản hồi để kiểm tra cấu trúc
-//                    Log.d("Response", response.body().toString());
-//
-//                    // Kiểm tra và xử lý phản hồi
-//                    if (response.body() instanceof HashMap) {
-//                        HashMap<String, Object> predictions = response.body();
-//
-//                        // Kiểm tra nếu predictions chứa lỗi
-//                        if (predictions.containsKey("error")) {
-//                            textViewResult.setText("Lỗi: " + predictions.get("error"));
-//                        } else {
-//                            // Nếu có dữ liệu liên quan đến dự đoán
-//                            textViewResult.setText("Kết quả dự đoán:\n" + predictions.toString());
-//                        }
-//                    } else {
-//                        textViewResult.setText("Phản hồi không đúng định dạng.");
-//                    }
-//                } else {
-//                    // Hiển thị thông báo lỗi chi tiết
-//                    try {
-//                        String errorResponse = response.errorBody().string();
-//                        Log.e("Error Response", errorResponse);
-//                        textViewResult.setText("Lỗi: " + response.code() + " - " + errorResponse);
-//                    } catch (Exception e) {
-//                        Log.e("Error", "Không thể đọc lỗi.");
-//                        textViewResult.setText("Lỗi: " + response.code() + " - Không thể đọc lỗi.");
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<HashMap<String, Object>> call, Throwable t) {
-//                Log.e("Error", t.getMessage());
-//                textViewResult.setText("Có lỗi xảy ra: " + t.getMessage());
-//            }
-//        });
-//    }
-//}

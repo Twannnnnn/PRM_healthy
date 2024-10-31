@@ -14,7 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    private FrameLayout btnGoToReport, btnAddFood, btnUserInfo, btnGoToSleepLog, btnGoToActivities, btnAIChat;
+    private FrameLayout btnGoToReport, btnAddFood, btnUserInfo, btnGoToSleepLog, btnGoToActivities, btnAIChat,btnGoToHealthAdvice;
+
     private DatabaseHelper dbHelper;
 
 
@@ -31,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
         btnUserInfo = findViewById(R.id.btnUserInfo);
         btnGoToActivities = findViewById(R.id.btnGoToActivities);
         btnGoToSleepLog = findViewById(R.id.btnGoToSleepLog);
+        btnGoToHealthAdvice = findViewById(R.id.btnGetAdvice);
+
 
         // Set up click listeners
         btnAddFood.setOnClickListener(v -> showAddFoodDialog());
@@ -39,8 +42,14 @@ public class MainActivity extends AppCompatActivity {
         btnUserInfo.setOnClickListener(this::onUserInfoAction);
         btnGoToActivities.setOnClickListener(this::onActivities);
         btnGoToSleepLog.setOnClickListener(this::onSleepLog);
-
+        btnGoToHealthAdvice.setOnClickListener(this::onActionGoToHealthAdvice);
         checkUser();
+    }
+
+    private void onActionGoToHealthAdvice(View view) {
+        // Navigate to HealthAdviceActivity
+        Intent intent = new Intent(MainActivity.this, HealthAdviceActivityLlama.class);
+        startActivity(intent);
     }
 
     private void onActionChat(View view) {

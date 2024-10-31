@@ -7,5 +7,6 @@
     <item android:name="android:textColor">#FFFFFF</item>
     <item android:name="android:padding">16dp</item>
     <item android:name="android:gravity">center</item>
+    <item android:name="android:radius">8dp</item>
     <item android:name="android:textSize">16sp</item>
 </selector>
