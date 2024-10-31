@@ -1,9 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
-        android:id="@+id/nav_settings"
-        android:title="Settings" />
+        android:id="@+id/navigation_home"
+
+        android:title="Home"
+        app:showAsAction="always" />
+
     <item
-        android:id="@+id/nav_about"
-        android:title="About" />
+        android:id="@+id/navigation_get_healthy"
+
+        android:title="Get Healthy"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/navigation_social"
+
+        android:title="Social"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/navigation_about_us"
+
+        android:title="About Us"
+        app:showAsAction="always" />
 </menu>

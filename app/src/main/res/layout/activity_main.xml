@@ -1,185 +1,266 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#A6C8E0">
 
-    <!-- Main content layout -->
-    <RelativeLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- Central image grid -->
-        <GridLayout
+
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <!-- Main content layout -->
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="16dp"
-            android:columnCount="2"
-            android:rowCount="3"
-            android:layout_gravity="center">
+            android:layout_height="45dp"
+            android:layout_gravity="top"
+            app:menu="@menu/nav_menu" />
+        <!-- Central image grid -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-            <!-- Custom button with image and text -->
-            <FrameLayout
-                android:id="@+id/btnGoToSleepLog"
-                android:layout_width="169dp"
-                android:layout_height="wrap_content"
-                android:layout_row="0"
-                android:layout_column="1"
-                android:layout_margin="8dp">
+            <GridLayout
+                android:layout_width="347dp"
+                android:layout_height="685dp"
+                android:layout_gravity="center"
+                android:columnCount="2"
+                android:padding="16dp"
+                android:rowCount="4"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0">
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="152dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/sleepsign" />
+                <!-- Custom button with image and text -->
+                <FrameLayout
+                    android:id="@+id/btnGoToSleepLog"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_row="0"
+                    android:layout_column="1"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/button_background_to">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|center_horizontal"
-                    android:background="#66000000"
-                    android:gravity="center"
-                    android:padding="4dp"
-                    android:text="Sleep Log"
-                    android:textColor="#ffffff" />
-            </FrameLayout>
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="152dp"
+                        android:background="@drawable/rounded_corner"
+                        android:radius="20dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/sleepsign" />
 
-            <FrameLayout
-                android:id="@+id/btnGoToActivities"
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|center_horizontal"
+                        android:background="#66000000"
+                        android:gravity="center"
+                        android:padding="4dp"
+                        android:text="Sleep Log"
+                        android:textColor="#ffffff" />
+                </FrameLayout>
 
-                android:layout_width="169dp"
-                android:layout_height="wrap_content"
-                android:layout_row="0"
-                android:layout_column="0"
-                android:layout_margin="8dp">
+                <FrameLayout
+                    android:id="@+id/btnGoToActivities"
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="152dp"
-                    android:src="@drawable/running"
-                    android:scaleType="centerCrop" />
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_row="0"
+                    android:layout_column="0"
+                    android:layout_margin="8dp">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|center_horizontal"
-                    android:background="#66000000"
-                    android:text="Activity"
-                    android:textColor="#ffffff"
-                    android:gravity="center"
-                    android:padding="4dp" />
-            </FrameLayout>
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="152dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/running" />
 
-            <FrameLayout
-                android:id="@+id/Aichat"
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|center_horizontal"
+                        android:background="#66000000"
+                        android:gravity="center"
+                        android:padding="4dp"
+                        android:text="Activity"
+                        android:textColor="#ffffff" />
+                </FrameLayout>
 
-                android:layout_width="169dp"
-                android:layout_height="wrap_content"
-                android:layout_row="1"
-                android:layout_column="0"
-                android:layout_margin="8dp">
+                <FrameLayout
+                    android:id="@+id/Aichat"
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="152dp"
-                    android:src="@drawable/aichat"
-                    android:scaleType="centerCrop" />
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_row="1"
+                    android:layout_column="0"
+                    android:layout_margin="8dp">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|center_horizontal"
-                    android:background="#66000000"
-                    android:text="Ai Chat"
-                    android:textColor="#ffffff"
-                    android:gravity="center"
-                    android:padding="4dp" />
-            </FrameLayout>
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="152dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/aichat" />
 
-            <FrameLayout
-                android:id="@+id/btnGoToReport"
-                android:layout_width="169dp"
-                android:layout_height="wrap_content"
-                android:layout_row="1"
-                android:layout_column="1"
-                android:layout_margin="8dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|center_horizontal"
+                        android:background="#66000000"
+                        android:gravity="center"
+                        android:padding="4dp"
+                        android:text="Search Food Nutrition"
+                        android:textColor="#ffffff" />
+                </FrameLayout>
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="152dp"
-                    android:src="@drawable/report"
-                    android:scaleType="centerCrop" />
+                <FrameLayout
+                    android:id="@+id/btnGoToReport"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_row="1"
+                    android:layout_column="1"
+                    android:layout_margin="8dp">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|center_horizontal"
-                    android:background="#66000000"
-                    android:text="Report"
-                    android:textColor="#ffffff"
-                    android:gravity="center"
-                    android:padding="4dp" />
-            </FrameLayout>
-            <FrameLayout
-                android:id="@+id/btnAddFood"
-                android:layout_width="169dp"
-                android:layout_height="wrap_content"
-                android:layout_row="2"
-                android:layout_column="0"
-                android:layout_margin="8dp">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="152dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/report" />
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="152dp"
-                    android:src="@drawable/addicon"
-                    android:scaleType="centerCrop" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|center_horizontal"
+                        android:background="#66000000"
+                        android:gravity="center"
+                        android:padding="4dp"
+                        android:text="Report"
+                        android:textColor="#ffffff" />
+                </FrameLayout>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|center_horizontal"
-                    android:background="#66000000"
-                    android:text="Add Food"
-                    android:textColor="#ffffff"
-                    android:gravity="center"
-                    android:padding="4dp" />
-            </FrameLayout>
-            <FrameLayout
-                android:id="@+id/btnUserInfo"
-                android:layout_width="169dp"
-                android:layout_height="wrap_content"
-                android:layout_row="2"
-                android:layout_column="1"
-                android:layout_margin="8dp">
+                <FrameLayout
+                    android:id="@+id/btnAddFood"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_row="2"
+                    android:layout_column="0"
+                    android:layout_margin="8dp">
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="152dp"
-                    android:src="@drawable/info"
-                    android:scaleType="centerCrop" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="152dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/addicon" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|center_horizontal"
-                    android:background="#66000000"
-                    android:text="My Info"
-                    android:textColor="#ffffff"
-                    android:gravity="center"
-                    android:padding="4dp" />
-            </FrameLayout>
-        </GridLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|center_horizontal"
+                        android:background="#66000000"
+                        android:gravity="center"
+                        android:padding="4dp"
+                        android:text="Add Food"
+                        android:textColor="#ffffff" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/btnUserInfo"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_row="2"
+                    android:layout_column="1"
+                    android:layout_margin="8dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="152dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/info" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|center_horizontal"
+                        android:background="#66000000"
+                        android:gravity="center"
+                        android:padding="4dp"
+                        android:text="My Info"
+                        android:textColor="#ffffff" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/btnMealPlan"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_row="3"
+                    android:layout_column="1"
+                    android:layout_margin="8dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="152dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/calander" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|center_horizontal"
+                        android:background="#66000000"
+                        android:gravity="center"
+                        android:padding="4dp"
+                        android:text="Meal Plan"
+                        android:textColor="#ffffff" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/btnGetAdvice"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_row="3"
+                    android:layout_column="0"
+                    android:layout_margin="8dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="152dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/advice" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|center_horizontal"
+                        android:background="#66000000"
+                        android:gravity="center"
+                        android:padding="4dp"
+                        android:text="Get Advice"
+                        android:textColor="#ffffff" />
+                </FrameLayout>
+            </GridLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </RelativeLayout>
 
     <!-- Navigation View -->
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:headerLayout="@layout/nav_header"
-        app:menu="@menu/nav_menu" />
+
 
 </androidx.drawerlayout.widget.DrawerLayout>
