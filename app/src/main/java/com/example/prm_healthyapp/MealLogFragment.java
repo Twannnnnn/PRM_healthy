@@ -232,7 +232,7 @@ public class MealLogFragment extends Fragment {
 
 // Trong phương thức calculateNutritionTotal
     private void calculateNutritionTotal(String startDate, String endDate) {
-        Cursor cursor = dbHelper.getAllMealLogs(1); // Thay thế bằng userId thực tế
+        Cursor cursor = dbHelper.getAllMealLogs(1);  // Sử dụng userID thực tế
 
         NutritionTotals totals = new NutritionTotals();
         List<String> foodItemsList = new ArrayList<>();
@@ -246,21 +246,23 @@ public class MealLogFragment extends Fragment {
         }
         cursor.close();
 
-        completedRequests = 0; // Đặt lại số lượng yêu cầu đã hoàn thành
+        completedRequests = 0; // Khởi tạo biến đếm
 
         for (String foodItems : foodItemsList) {
             fetchNutritionalInfoFromApi(foodItems, (calories, protein, fat, carbohydrates) -> {
-                totals.totalCalories += calories;
-                totals.totalProtein += protein;
-                totals.totalFat += fat;
-                totals.totalCarbohydrates += carbohydrates;
+                synchronized (this) {  // Đồng bộ hóa để tránh xung đột
+                    totals.totalCalories += calories;
+                    totals.totalProtein += protein;
+                    totals.totalFat += fat;
+                    totals.totalCarbohydrates += carbohydrates;
 
-                completedRequests++; // Tăng số lượng yêu cầu đã hoàn thành
+                    completedRequests++;  // Tăng số lượng yêu cầu đã hoàn thành
 
-                if (completedRequests == foodItemsList.size()+3) { // Nếu tất cả yêu cầu đã hoàn thành
-                    String resultMessage = String.format("Total Calories: %.2f\nTotal Protein: %.2f g\nTotal Fat: %.2f g\nTotal Carbohydrates: %.2f g",
-                            totals.totalCalories, totals.totalProtein, totals.totalFat, totals.totalCarbohydrates);
-                    showResultDialog(resultMessage); // Hiển thị kết quả
+                    if (completedRequests == foodItemsList.size()) {  // Kiểm tra điều kiện hoàn thành
+                        String resultMessage = String.format("Total Calories: %.2f\nTotal Protein: %.2f g\nTotal Fat: %.2f g\nTotal Carbohydrates: %.2f g",
+                                totals.totalCalories, totals.totalProtein, totals.totalFat, totals.totalCarbohydrates);
+                        showResultDialog(resultMessage);  // Hiển thị kết quả
+                    }
                 }
             });
         }

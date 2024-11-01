@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PRM_HealthyApp</string>
+    <string name="app_name">Health Pocket</string>
     <string-array name="meal_types">
         <item>Bữa sáng</item>
         <item>Bữa trưa</item>
