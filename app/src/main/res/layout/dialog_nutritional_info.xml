@@ -1,0 +1,36 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#FFFFFF">
+
+    <TextView
+        android:id="@+id/tvFoodItems"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Food Items"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvFoodMass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Food Mass"
+        android:textSize="16sp"
+        android:layout_marginTop="8dp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:padding="12dp"
+        android:layout_margin="12dp"
+        android:background="@drawable/button_background"
+        android:textColor="#FFFFFF"
+        android:id="@+id/btnClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Close"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@null"
+        />
+</LinearLayout>

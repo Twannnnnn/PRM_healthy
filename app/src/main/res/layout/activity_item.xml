@@ -3,7 +3,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="8dp"
-    android:background="#FFFFFF">
+    android:background="#A6C8E0">
 
     <TextView
         android:id="@+id/textViewActivityName"
@@ -13,27 +13,36 @@
         android:textSize="16sp"
         android:textColor="#000000" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnUpdate"
-        android:layout_width="wrap_content"
+        android:layout_width="126dp"
         android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:background="@drawable/button_background"
+        android:padding="12dp"
         android:text="Update"
-        android:background="#2196F3"
+
         android:textColor="@android:color/white" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnDelete"
-        android:layout_width="wrap_content"
+        android:layout_width="123dp"
         android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:background="@drawable/button_background"
+        android:padding="12dp"
         android:text="Delete"
-        android:background="#2196F3"
+
         android:textColor="@android:color/white" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
+        android:padding="12dp"
+        android:layout_margin="12dp"
+        android:background="@drawable/button_background"
         android:id="@+id/btnSetReminder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Set Reminder"
-        android:background="#2196F3"
+
         android:textColor="@android:color/white" />
 </LinearLayout>

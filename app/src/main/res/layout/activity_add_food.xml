@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#A6C8E0"
     tools:context=".AddFoodActivity">
     <LinearLayout
         android:layout_width="match_parent"
@@ -61,7 +62,10 @@
             android:hint="Enter minerals"
             android:inputType="textMultiLine" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
+            android:padding="12dp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/button_background"
             android:id="@+id/buttonSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

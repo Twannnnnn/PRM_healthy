@@ -15,6 +15,8 @@ public class SleepLogAdapter extends RecyclerView.Adapter<SleepLogAdapter.SleepL
     private List<SleepLogModel> sleepLogList;
     private OnSleepLogListener onSleepLogListener;
 
+
+
     public interface OnSleepLogListener {
         void onDeleteClick(int position);
         void onUpdateClick(int position);

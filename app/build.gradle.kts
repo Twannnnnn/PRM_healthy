@@ -41,7 +41,13 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
-    implementation(libs.cardview) // Thêm dòng này
+    implementation(libs.cardview)
+    implementation(libs.recyclerview)
+
+    implementation(libs.coordinatorlayout) // Thêm dòng này
+
+    implementation(libs.gridlayout) // Thêm dòng này
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

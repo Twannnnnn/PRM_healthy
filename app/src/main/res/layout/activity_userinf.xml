@@ -12,18 +12,26 @@
         android:id="@+id/editTextName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="116dp"
+        android:background="@drawable/edit_text_background"
         android:hint="Tên"
         android:inputType="textPersonName"
-        app:layout_constraintTop_toTopOf="parent"
+        android:padding="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/editTextEmail"
         android:layout_width="0dp"
+        android:background="@drawable/edit_text_background"
+        android:layout_marginTop="5dp"
+
+        android:padding="12dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+
+
         android:hint="Email"
         android:inputType="textEmailAddress"
         app:layout_constraintTop_toBottomOf="@id/editTextName"
@@ -34,7 +42,10 @@
         android:id="@+id/editTextAge"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+
+        android:background="@drawable/edit_text_background"
+        android:layout_marginTop="5dp"
+        android:padding="12dp"
         android:hint="Tuổi"
         android:inputType="number"
         app:layout_constraintTop_toBottomOf="@id/editTextEmail"
@@ -45,7 +56,10 @@
         android:id="@+id/editTextGender"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+
+        android:background="@drawable/edit_text_background"
+        android:layout_marginTop="5dp"
+        android:padding="12dp"
         android:hint="Giới tính"
         android:inputType="text"
         app:layout_constraintTop_toBottomOf="@id/editTextAge"
@@ -56,7 +70,9 @@
         android:id="@+id/editTextWeight"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:background="@drawable/edit_text_background"
+        android:layout_marginTop="5dp"
+        android:padding="12dp"
         android:hint="Cân nặng (kg)"
         android:inputType="numberDecimal"
         app:layout_constraintTop_toBottomOf="@id/editTextGender"
@@ -67,7 +83,9 @@
         android:id="@+id/editTextHeight"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:background="@drawable/edit_text_background"
+        android:layout_marginTop="5dp"
+        android:padding="12dp"
         android:hint="Chiều cao (cm)"
         android:inputType="numberDecimal"
         app:layout_constraintTop_toBottomOf="@id/editTextWeight"
@@ -78,43 +96,71 @@
         android:id="@+id/editTextWaist"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:hint="Vòng eo (cm)"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/edit_text_background"
+        android:hint="Vòng ngực (cm)"
         android:inputType="numberDecimal"
-        app:layout_constraintTop_toBottomOf="@id/editTextHeight"
+        android:padding="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/editTextHeight" />
 
     <EditText
         android:id="@+id/editTextNeck"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:hint="Vòng cổ (cm)"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/edit_text_background"
+        android:hint="Vòng eo (cm)"
         android:inputType="numberDecimal"
-        app:layout_constraintTop_toBottomOf="@id/editTextWaist"
+        android:padding="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/editTextWaist" />
 
     <EditText
         android:id="@+id/editTextHips"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:background="@drawable/edit_text_background"
+        android:layout_marginTop="5dp"
+        android:padding="12dp"
         android:hint="Vòng hông (cm)"
         android:inputType="numberDecimal"
         app:layout_constraintTop_toBottomOf="@id/editTextNeck"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonSave"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="52dp"
+        android:background="@drawable/button_background"
+
+        android:padding="12dp"
         android:text="Lưu"
-        app:layout_constraintTop_toBottomOf="@id/editTextHips"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/editTextHips" />
+
+    <android.widget.TextView
+        android:id="@+id/textView"
+        android:layout_width="363dp"
+        android:layout_height="53dp"
+        android:fontFamily="monospace"
+        android:lineSpacingExtra="34sp"
+        android:text="Add User Information"
+        android:textAlignment="textStart"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/editTextName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.386" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

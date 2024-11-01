@@ -7,9 +7,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "health_management.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 16;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -105,6 +108,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "food_items TEXT NOT NULL, " +
                 "food_mass TEXT NOT NULL, " +
                 "total_calories REAL, " +
+                "total_protein REAL, " + // Add this line
+                "total_fat REAL, " + // Add this line
+                "total_carbohydrates REAL, " + // Add this line
                 "meal_time TEXT NOT NULL, " +
                 "log_date TEXT NOT NULL, " +
                 "FOREIGN KEY (user_id) REFERENCES users(id))");
@@ -148,10 +154,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "minerals TEXT, " +
                 "FOREIGN KEY (meal_log_id) REFERENCES meal_log(id)" +
                 ");");
+        addDemoData(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+        if (oldVersion < 12) {
+            db.execSQL("ALTER TABLE food ADD COLUMN total_calories REAL;");
+        }
+
+        if (oldVersion < 12) {
+            db.execSQL("ALTER TABLE food ADD COLUMN quantity INTEGER;");
+        }
         // Xóa bảng cũ nếu tồn tại và tạo lại
         db.execSQL("DROP TABLE IF EXISTS user_disease");
         db.execSQL("DROP TABLE IF EXISTS disease");
@@ -216,13 +231,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.delete("users", "id = ?", new String[]{String.valueOf(id)});
         db.close();
     }
-    public void addMealLog(int userId, String mealType, String foodItems, float totalCalories, String mealTime, String logDate) {
+    public void addMealLog(int userId, String mealType, String foodItems, float totalCalories, float totalProtein, float totalFat, float totalCarbohydrates, String mealTime, String logDate) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("user_id", userId);
         values.put("meal_type", mealType);
         values.put("food_items", foodItems);
         values.put("total_calories", totalCalories);
+        values.put("total_protein", totalProtein); // Thêm protein
+        values.put("total_fat", totalFat); // Thêm chất béo
+        values.put("total_carbohydrates", totalCarbohydrates); // Thêm carbohydrate
         values.put("meal_time", mealTime);
         values.put("log_date", logDate);
         db.insert("meal_log", null, values);
@@ -546,7 +564,59 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return null;
     }
+    private void addDemoData(SQLiteDatabase db) {
 
+            ContentValues userValues = new ContentValues();
+            userValues.put("name", "User ");
+            userValues.put("email", "user@example.com");
+            userValues.put("password", "password" );
+            userValues.put("age", 20 );
+            userValues.put("gender",  "Male" );
+            userValues.put("weight", 60 );
+            userValues.put("height", 150 );
+            db.insert("users", null, userValues);
+
+
+        // Manually add meal logs
+        addMealLog(db, 1, "Breakfast", "Eggs, Bread", "150g", 300, "08:00", "2024-10-29");
+        addMealLog(db, 1, "Lunch", "Chicken, Rice", "200g", 500, "12:00", "2024-10-28");
+        addMealLog(db, 1, "Dinner", "Fish, Salad", "250g", 400, "18:00", "2024-10-28");
+        addMealLog(db, 1, "Breakfast", "Pasta, Cheese", "180g", 350, "07:30", "2024-10-27");
+        addMealLog(db, 1, "Lunch", "Apples, Yogurt", "160g", 250, "12:30", "2024-10-27");
+        addMealLog(db, 1, "Dinner", "Nuts, Bananas", "100g", 200, "19:00", "2024-10-27");
+        addMealLog(db, 1, "Snack", "Tomatoes, Garlic", "120g", 150, "15:00", "2024-10-26");
+        addMealLog(db, 1, "Lunch", "Carrots, Broccoli", "140g", 220, "12:15", "2024-10-26");
+        addMealLog(db, 1, "Dinner", "Peppers, Onions", "170g", 300, "18:45", "2024-10-26");
+        addMealLog(db, 1, "Breakfast", "Spinach, Yogurt", "130g", 200, "09:00", "2024-10-25");
+
+        // Add demo sleep logs
+        addSleepLog(db, 1, "22:00", "06:00", 8.0f, "2024-10-30");
+        addSleepLog(db, 1, "23:00", "07:00", 8.0f, "2024-10-30");
+        addSleepLog(db, 1, "21:30", "05:30", 8.0f, "2024-10-30");
+        // Continue adding sleep logs as needed...
+    }
+
+    private void addMealLog(SQLiteDatabase db, int userId, String mealType, String foodItems, String foodMass, float totalCalories, String mealTime, String logDate) {
+        ContentValues mealLogValues = new ContentValues();
+        mealLogValues.put("user_id", userId);
+        mealLogValues.put("meal_type", mealType);
+        mealLogValues.put("food_items", foodItems);
+        mealLogValues.put("food_mass", foodMass);
+        mealLogValues.put("total_calories", totalCalories);
+        mealLogValues.put("meal_time", mealTime);
+        mealLogValues.put("log_date", logDate);
+        db.insert("meal_log", null, mealLogValues);
+    }
+
+    private void addSleepLog(SQLiteDatabase db, int userId, String sleepStart, String sleepEnd, float duration, String logDate) {
+        ContentValues sleepLogValues = new ContentValues();
+        sleepLogValues.put("user_id", userId);
+        sleepLogValues.put("sleep_start", sleepStart);
+        sleepLogValues.put("sleep_end", sleepEnd);
+        sleepLogValues.put("duration", duration);
+        sleepLogValues.put("log_date", logDate);
+        db.insert("sleep_log", null, sleepLogValues);
+    }
     public void updateReminder(int id, String reminderTime) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -560,4 +630,157 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.delete("reminders", "id = ?", new String[]{String.valueOf(id)});
         db.close();
     }
+
+    public double getBreakfastCalories(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        double totalCalories = 0.0;
+        String query = "SELECT SUM(total_calories) FROM meal_log WHERE meal_type = ? AND user_id = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[] {"Breakfast", String.valueOf(userId)});
+        if (cursor.moveToFirst()) {
+            totalCalories = cursor.getDouble(0);  // Get the sum of calories
+        }
+        cursor.close();
+        db.close();
+        return totalCalories;
+    }
+
+    public double getAfternoonCalories(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        double totalCalories = 0.0;
+        String query = "SELECT SUM(total_calories) FROM meal_log WHERE meal_type = ? AND user_id = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[] {"Afternoon", String.valueOf(userId)});
+        if (cursor.moveToFirst()) {
+            totalCalories = cursor.getDouble(0);  // Get the sum of calories
+        }
+        cursor.close();
+        db.close();
+        return totalCalories;
+    }
+
+    public double getLunchCalories(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        double totalCalories = 0.0;
+        String query = "SELECT SUM(total_calories) FROM meal_log WHERE meal_type = ? AND user_id = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[] {"Lunch", String.valueOf(userId)});
+        if (cursor.moveToFirst()) {
+            totalCalories = cursor.getDouble(0);  // Get the sum of calories
+        }
+        cursor.close();
+        db.close();
+        return totalCalories;
+    }
+
+    public double getDinnerCalories(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        double totalCalories = 0.0;
+        String query = "SELECT SUM(total_calories) FROM meal_log WHERE meal_type = ? AND user_id = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[] {"Dinner", String.valueOf(userId)});
+        if (cursor.moveToFirst()) {
+            totalCalories = cursor.getDouble(0);  // Get the sum of calories
+        }
+        cursor.close();
+        db.close();
+        return totalCalories;
+    }
+
+    public void insertMealLog(int userId, String mealType, String foodItems,String foodMass, double totalCalories, String mealTime, String logDate) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("user_id", userId);
+        values.put("meal_type", mealType);
+        values.put("food_items", foodItems);
+        values.put("food_mass", foodMass);
+        values.put("total_calories", totalCalories);
+        values.put("meal_time", mealTime);
+        values.put("log_date", logDate);
+
+        db.insert("meal_log", null, values);
+        db.close();
+    }
+
+    // Method to retrieve all FoodItem objects
+    public List<FoodItem> getAllFoodItems() {
+        List<FoodItem> foodItems = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM food", null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                FoodItem foodItem = new FoodItem(
+                        cursor.getInt(cursor.getColumnIndex("id")),
+                        cursor.getString(cursor.getColumnIndex("name")),
+                        cursor.getDouble(cursor.getColumnIndex("fat")),
+                        cursor.getDouble(cursor.getColumnIndex("protein")),
+                        cursor.getDouble(cursor.getColumnIndex("carbohydrates")),
+                        cursor.getDouble(cursor.getColumnIndex("fiber")),
+                        cursor.getString(cursor.getColumnIndex("vitamins")),
+                        cursor.getString(cursor.getColumnIndex("minerals")),
+                        cursor.getDouble(cursor.getColumnIndex("total_calories")),
+                        cursor.getInt(cursor.getColumnIndex("quantity"))
+                );
+                foodItems.add(foodItem);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return foodItems;
+    }
+
+    public boolean insertMealPlan(int userId, String mealType, String foodItems, double calories, String planDate) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("user_id", userId);
+        values.put("meal_type", mealType);
+        values.put("planned_food_items", foodItems); // Lưu danh sách món ăn đã chọn
+        values.put("planned_calories", calories);
+        values.put("plan_date", planDate);
+
+        long result = db.insert("meal_plan", null, values);
+        return result != -1;
+    }
+    public boolean checkMealPlanExists(int userId, String mealType, String planDate) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT COUNT(*) FROM meal_plan WHERE user_id = ? AND meal_type = ? AND plan_date = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(userId), mealType, planDate});
+
+        boolean exists = false;
+        if (cursor != null) {
+            cursor.moveToFirst();
+            int count = cursor.getInt(0);
+            exists = (count > 0);
+            cursor.close();
+        }
+        return exists;
+    }
+    public List<Meal> getMealsForDate(String date, int userId) {
+        List<Meal> meals = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Truy vấn lấy planned_food_items theo user_id và plan_date
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM meal_plan WHERE plan_date = ? AND user_id = ?",
+                new String[]{date, String.valueOf(userId)}
+        );
+
+        if (cursor.moveToFirst()) {
+            do {
+                Meal meal = new Meal(
+                        cursor.getInt(cursor.getColumnIndex("id")),
+                        cursor.getInt(cursor.getColumnIndex("user_id")),
+                        cursor.getString(cursor.getColumnIndex("meal_type")),
+                        cursor.getString(cursor.getColumnIndex("planned_food_items")),
+                        cursor.getString(cursor.getColumnIndex("planned_calories")),
+                        cursor.getString(cursor.getColumnIndex("plan_date"))
+                );
+                meals.add(meal);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return meals;
+    }
+
 }

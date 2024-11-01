@@ -7,17 +7,28 @@
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/textViewName"
-        android:layout_width="wrap_content"
+        android:id="@+id/title"
+        android:layout_width="396dp"
         android:layout_height="wrap_content"
-        android:text="Name: "
-        android:textSize="18sp" />
+        android:padding="8dp"
+        android:text="User Information"
+        android:textSize="35sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textViewEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Email: "
+        android:textSize="18sp"
+        android:padding="8dp"/>
+
+    <TextView
+        android:id="@+id/textViewName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text="Name: "
         android:textSize="18sp" />
 
     <TextView
@@ -25,69 +36,80 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Password: "
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:padding="8dp"/>
 
     <TextView
         android:id="@+id/textViewAge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Age: "
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:padding="8dp"/>
 
     <TextView
         android:id="@+id/textViewGender"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Gender: "
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:padding="8dp"/>
 
     <TextView
         android:id="@+id/textViewWeight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Weight: "
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:padding="8dp"/>
 
     <TextView
         android:id="@+id/textViewHeight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Height: "
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:padding="8dp"/>
 
     <TextView
         android:id="@+id/textViewBMI"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="BMI: "
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:padding="8dp"/>
 
     <TextView
         android:id="@+id/textViewBodyFat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Body Fat Percentage: "
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:padding="8dp"
+        />
 
     <TextView
         android:id="@+id/textViewWaist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Waist: "
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:padding="8dp"/>
 
     <TextView
         android:id="@+id/textViewNeck"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Neck: "
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:padding="8dp"/>
 
     <TextView
         android:id="@+id/textViewHips"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hips: "
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:padding="8dp"/>
 
 </LinearLayout>
