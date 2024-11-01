@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    tools:context=".SharePlanActivity">
+
+    <LinearLayout
+        android:layout_marginTop="150dp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/ln1"
+        android:layout_width="225dp"
+        android:layout_height="wrap_content">
+    <ImageButton
+        android:id="@+id/btn_share_gmail"
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/white"
+        android:contentDescription="Share via Gmail"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_gmail" />
+
+    <TextView
+        android:layout_gravity="center"
+        android:layout_toEndOf="@+id/btn_share_gmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Share via Gmail"/>
+    </LinearLayout>
+    <!-- Facebook Share Button -->
+    <LinearLayout
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/ln1"
+        android:id="@+id/ln2"
+        android:layout_width="225dp"
+        android:layout_height="wrap_content">
+    <ImageButton
+        android:id="@+id/btn_share_facebook"
+        android:layout_width="55dp"
+        android:layout_height="50dp"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/white"
+        android:contentDescription="Share via Facebook"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_facebook" />
+    <TextView
+        android:layout_gravity="center"
+        android:layout_below="@id/btn_share_gmail"
+        android:layout_toEndOf="@+id/btn_share_facebook"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Share via Facebook"/>
+    </LinearLayout>
+
+    <!-- Messenger Share Button -->
+    <LinearLayout
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/ln2"
+        android:id="@+id/ln3"
+        android:layout_width="225dp"
+        android:layout_height="wrap_content">
+    <ImageButton
+        android:id="@+id/btn_share_messenger"
+        android:layout_width="55dp"
+        android:layout_height="50dp"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/white"
+        android:contentDescription="Share via Messenger"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_messenger" />
+    <TextView
+        android:layout_gravity="center"
+        android:layout_toEndOf="@+id/btn_share_messenger"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Share via Messenger"/>
+    </LinearLayout>
+
+</RelativeLayout>

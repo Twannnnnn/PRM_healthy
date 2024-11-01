@@ -14,7 +14,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    private FrameLayout btnGoToReport, btnAddFood, btnUserInfo, btnGoToSleepLog, btnGoToActivities, btnAIChat,btnGoToHealthAdvice,btnMealPlan;
+    private FrameLayout btnGoToReport, btnAddFood, btnUserInfo, btnGoToSleepLog, btnGoToActivities, btnAIChat,btnGoToHealthAdvice,btnMealPlan,
+    btnShare, btnSync,
+    btnExpert;
 
     private DatabaseHelper dbHelper;
 
@@ -34,6 +36,21 @@ public class MainActivity extends AppCompatActivity {
         btnGoToSleepLog = findViewById(R.id.btnGoToSleepLog);
         btnGoToHealthAdvice = findViewById(R.id.btnGetAdvice);
         btnMealPlan = findViewById(R.id.btnMealPlan);
+        btnSync = findViewById(R.id.btnSync);
+        btnShare = findViewById(R.id.btnShare);
+        btnExpert = findViewById(R.id.btnExpert);
+        btnSync.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, SyncActivity.class);
+            startActivity(intent);
+        });
+        btnShare.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, SharePlanActivity.class);
+            startActivity(intent);
+        });
+        btnExpert.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ExpertAdviceActivity.class);
+            startActivity(intent);
+        });
 
 
         // Set up click listeners

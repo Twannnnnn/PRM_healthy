@@ -7,6 +7,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.prm_healthyapp.model.MealPlanx;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -781,6 +783,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         return meals;
+    }
+
+    public List<MealPlanx> getMealPlansByUserId(int userId) {
+        List<MealPlanx> mealPlans = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT * FROM meal_plan WHERE user_id = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(userId)});
+
+        if (cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex("id"));
+                @SuppressLint("Range") String mealType = cursor.getString(cursor.getColumnIndex("meal_type"));
+                @SuppressLint("Range") String plannedFoodItems = cursor.getString(cursor.getColumnIndex("planned_food_items"));
+                @SuppressLint("Range") float plannedCalories = cursor.getFloat(cursor.getColumnIndex("planned_calories"));
+                @SuppressLint("Range") String planDate = cursor.getString(cursor.getColumnIndex("plan_date"));
+
+                MealPlanx mealPlan = new MealPlanx(id, userId, mealType, plannedFoodItems, plannedCalories, planDate);
+                mealPlans.add(mealPlan);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+
+        return mealPlans;
     }
 
 }
