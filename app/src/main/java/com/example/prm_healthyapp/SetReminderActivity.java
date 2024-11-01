@@ -79,7 +79,15 @@ public class SetReminderActivity extends AppCompatActivity {
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        Notification notification = new NotificationCompat.Builder(this, "your_channel_id")
+        // Create channel only if API level is 26 or higher
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("channel_id", "hello channel", NotificationManager.IMPORTANCE_HIGH);
+            channel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+            channel.enableVibration(true);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        Notification notification = new NotificationCompat.Builder(this, "channel_id")
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle("Notification Title")
                 .setContentText(data)
@@ -162,17 +170,13 @@ public class SetReminderActivity extends AppCompatActivity {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, activityId, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-        // Set a repeating alarm
+        // Use setExact for API 19+, set for lower versions
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            alarmManager.setInexactRepeating(
-                    AlarmManager.RTC_WAKEUP,
-                    calendar.getTimeInMillis(),
-                    AlarmManager.INTERVAL_DAY, // Repeat every day
-                    pendingIntent);
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         } else {
             alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         }
 
-        Log.d("SetReminderActivity", "Daily alarm scheduled for: " + calendar.getTime());
+        Log.d("SetReminderActivity", "Alarm set for: " + calendar.getTime());
     }
 }

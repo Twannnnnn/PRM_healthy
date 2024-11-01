@@ -857,4 +857,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return mealPlans;
     }
 
+    public void addDefaultSleepActivity() {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Check if the "Sleep" activity already exists
+        Cursor cursor = db.rawQuery("SELECT * FROM activity WHERE name = ?", new String[]{"Sleep"});
+        if (cursor.getCount() == 0) { // If no such activity exists
+            ContentValues values = new ContentValues();
+            values.put("user_id", 1); // Assuming you want to set a default user ID
+            values.put("name", "Sleep");
+            values.put("description", "Sleep activity for tracking sleep duration.");
+            values.put("start_time", "22:00"); // Default start time
+            values.put("end_time", "06:00"); // Default end time
+            values.put("reminder", false); // Default reminder value
+
+            // Insert the "Sleep" activity
+            db.insert("activity", null, values);
+        }
+        cursor.close();
+        db.close();
+    }
+
 }

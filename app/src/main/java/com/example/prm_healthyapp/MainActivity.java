@@ -12,6 +12,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity {
 
     private FrameLayout btnGoToReport, btnAddFood, btnUserInfo, btnGoToSleepLog, btnGoToActivities, btnAIChat,btnGoToHealthAdvice,btnMealPlan,btnSetNutritionGoal,btnDietaryHabit, btnShare, btnSync, btnExpert;
@@ -24,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         dbHelper = new DatabaseHelper(this);
+        dbHelper.addDefaultSleepActivity();
 
         // Initialize FrameLayouts instead of Buttons
         btnGoToReport = findViewById(R.id.btnGoToReport);
@@ -52,6 +57,12 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        Intent intent = getIntent();
+        if (intent != null && "start_sleep_log".equals(intent.getStringExtra("action"))) {
+            String sleepStartTime = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
+            createSleepLog(sleepStartTime);
+        }
+
 
         // Set up click listeners
         btnAddFood.setOnClickListener(v -> showAddFoodDialog());
@@ -67,6 +78,16 @@ public class MainActivity extends AppCompatActivity {
 
 
         checkUser();
+    }
+
+    private void createSleepLog(String sleepStartTime) {
+        int userId = dbHelper.getFirstUser().getId(); // Implement this method to get the user ID
+        String logDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+
+        // Add the sleep log to the database
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        dbHelper.addSleepLog(userId, sleepStartTime, sleepStartTime, 0.0f, logDate); // Duration can be set later
+        Toast.makeText(this, "Sleep log created with start time: " + sleepStartTime, Toast.LENGTH_SHORT).show();
     }
 
     private void onActionGoToHealthAdvice(View view) {
