@@ -2,6 +2,7 @@ package com.example.prm_healthyapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.CalendarView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -11,9 +12,13 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.gridlayout.widget.GridLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class MealPlan extends AppCompatActivity {
@@ -23,7 +28,6 @@ public class MealPlan extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meal_plan);
 
-        // Set padding để tránh bị che khuất bởi thanh hệ thống
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -36,33 +40,21 @@ public class MealPlan extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // Tìm LinearLayout calendarContainer trong layout
-        GridLayout calendarContainer = findViewById(R.id.calendarContainer);
+        RecyclerView calendarRecyclerView = findViewById(R.id.calendarRecyclerView);
+        calendarRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Định dạng ngày
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd\nEE", Locale.getDefault());
+        // Tạo danh sách 12 tháng bắt đầu từ tháng hiện tại
+        List<Calendar> months = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
-
-        // Tạo các TextView cho 7 ngày tiếp theo
-        for (int i = 0; i < 7; i++) {
-            // Tạo TextView cho mỗi ngày
-            TextView dayTextView = new TextView(this);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
-            params.setMargins(8, 0, 8, 0); // Tạo khoảng cách giữa các ngày
-
-            dayTextView.setLayoutParams(params);
-            dayTextView.setTextAlignment(TextView.TEXT_ALIGNMENT_CENTER);
-            dayTextView.setTextColor(ContextCompat.getColor(this, android.R.color.white));
-            dayTextView.setPadding(8, 8, 8, 8);
-            dayTextView.setText(dateFormat.format(calendar.getTime()));
-
-            // Thêm TextView vào calendarContainer
-            calendarContainer.addView(dayTextView);
-
-            // Tiến đến ngày tiếp theo
-            calendar.add(Calendar.DAY_OF_YEAR, 1);
+        for (int i = 0; i < 12; i++) {
+            Calendar month = (Calendar) calendar.clone();
+            month.add(Calendar.MONTH, i);
+            months.add(month);
         }
+
+        // Thiết lập adapter cho RecyclerView
+        CalendarAdapter adapter = new CalendarAdapter(months, this);
+        calendarRecyclerView.setAdapter(adapter);
     }
 }
+

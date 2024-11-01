@@ -50,7 +50,7 @@ public class AddFoodActivity extends AppCompatActivity {
         String minerals = editTextMinerals.getText().toString();
 
         // Inserting data into database
-        SQLiteDatabase db = this.openOrCreateDatabase("FoodDB", MODE_PRIVATE, null);
+        SQLiteDatabase db = this.openOrCreateDatabase("health_management.db", MODE_PRIVATE, null);
         db.execSQL("INSERT INTO food (name, fat, protein, carbohydrates, fiber, vitamins, minerals) VALUES (?, ?, ?, ?, ?, ?, ?)",
                 new Object[]{name, fat, protein, carbohydrates, fiber, vitamins, minerals});
         Toast.makeText(this, "Food saved", Toast.LENGTH_SHORT).show();

@@ -2,6 +2,7 @@ package com.example.prm_healthyapp;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -178,6 +179,9 @@ public class AddMealPlanActivity extends AppCompatActivity {
 
         if (isInserted) {
             Toast.makeText(this, "Lập kế hoạch thành công.", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(AddMealPlanActivity.this, MealPlan.class);
+            intent.putExtra("planDate", planDate); // Pass data if needed
+            startActivity(intent);
         } else {
             Toast.makeText(this, "Lỗi khi lưu kế hoạch bữa ăn.", Toast.LENGTH_SHORT).show();
         }

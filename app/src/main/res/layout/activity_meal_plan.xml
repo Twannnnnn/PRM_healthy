@@ -9,118 +9,18 @@
     android:background="#E6FFE0"
     tools:context=".MealPlan">
 
-    <androidx.gridlayout.widget.GridLayout
-        android:id="@+id/calendarContainer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/calendar_background"
-        android:padding="16dp"
-        app:columnCount="7"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/calorieCircle">
-
-        <!-- Các TextView cho ngày sẽ được thêm vào đây thông qua Java code -->
-
-    </androidx.gridlayout.widget.GridLayout>
-
-    <!-- Vòng tròn Calorie Tracker -->
-    <FrameLayout
-        android:id="@+id/calorieCircle"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        app:layout_constraintTop_toBottomOf="@id/calendarContainer"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+    <!-- RecyclerView to display list of months -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/calendarRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/calorie_circle_background">
-
-        <TextView
-            android:id="@+id/caloriesText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1122"
-            android:textSize="36sp"
-            android:textColor="#FFFFFF"
-            android:gravity="center"
-            android:layout_gravity="center"/>
-
-        <TextView
-            android:id="@+id/calorieGoalText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Goal 2245"
-            android:textSize="16sp"
-            android:textColor="#CCCCCC"
-            android:layout_gravity="center_horizontal|bottom"
-            android:layout_marginBottom="24dp"/>
-
-    </FrameLayout>
-
-    <!-- Các chỉ số Protein, Carb và Fat -->
-    <LinearLayout
-        android:id="@+id/nutritionInfoContainer"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/calorieCircle"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/addMealPlanButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:padding="16dp">
+        app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Chỉ số Protein -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Protein"
-            android:textColor="#333333"
-            android:textSize="16sp"/>
-        <ProgressBar
-            android:layout_width="0dp"
-            android:layout_height="8dp"
-            android:layout_marginTop="4dp"
-            android:progress="47"
-            android:max="60"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:progressTint="#FFD700"/>
-
-        <!-- Chỉ số Carb -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Carb"
-            android:textColor="#333333"
-            android:layout_marginTop="16dp"
-            android:textSize="16sp"/>
-        <ProgressBar
-            android:layout_width="0dp"
-            android:layout_height="8dp"
-            android:layout_marginTop="4dp"
-            android:progress="100"
-            android:max="225"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:progressTint="#32CD32"/>
-
-        <!-- Chỉ số Fat -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Fat"
-            android:textColor="#333333"
-            android:layout_marginTop="16dp"
-            android:textSize="16sp"/>
-        <ProgressBar
-            android:layout_width="0dp"
-            android:layout_height="8dp"
-            android:layout_marginTop="4dp"
-            android:progress="83"
-            android:max="77"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:progressTint="#FF4500"/>
-    </LinearLayout>
-
-    <!-- Nút Thêm Mới -->
+    <!-- Floating Action Button to add meal plans -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addMealPlanButton"
         android:layout_width="wrap_content"
