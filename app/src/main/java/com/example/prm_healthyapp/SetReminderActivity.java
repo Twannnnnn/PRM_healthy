@@ -1,20 +1,27 @@
 package com.example.prm_healthyapp;
 
 import android.app.AlarmManager;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
+import java.time.Instant;
 import java.util.Calendar;
 
 public class SetReminderActivity extends AppCompatActivity {
@@ -64,6 +71,28 @@ public class SetReminderActivity extends AppCompatActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void sendNotification(String data) {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("notification_data", data);
+        PendingIntent pi = PendingIntent.getActivity(this, 10, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        Notification notification = new NotificationCompat.Builder(this, "your_channel_id")
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle("Notification Title")
+                .setContentText(data)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(data))
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setContentIntent(pi)
+                .setAutoCancel(true)
+                .build();
+
+        int notificationId = 1; // Use a static ID or implement a counter
+        notificationManager.notify(notificationId, notification);
+    }
+
     private void bindingAction() {
         btnSetReminder.setOnClickListener(view -> {
             String reminderTime = String.format("%02d:%02d", timePicker.getHour(), timePicker.getMinute());
@@ -108,6 +137,7 @@ public class SetReminderActivity extends AppCompatActivity {
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
         if (alarmManager != null) {
+            Log.d("SetReminderActivity", "Alarm set for: " + reminderTime);
             scheduleExactAlarm(reminderTime, alarmManager);
         }
     }
@@ -122,6 +152,7 @@ public class SetReminderActivity extends AppCompatActivity {
         calendar.set(Calendar.MINUTE, minute);
         calendar.set(Calendar.SECOND, 0);
 
+        // Adjust for past times
         if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
             calendar.add(Calendar.DAY_OF_MONTH, 1);
         }
@@ -131,6 +162,17 @@ public class SetReminderActivity extends AppCompatActivity {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, activityId, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        // Set a repeating alarm
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            alarmManager.setInexactRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.getTimeInMillis(),
+                    AlarmManager.INTERVAL_DAY, // Repeat every day
+                    pendingIntent);
+        } else {
+            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        }
+
+        Log.d("SetReminderActivity", "Daily alarm scheduled for: " + calendar.getTime());
     }
 }

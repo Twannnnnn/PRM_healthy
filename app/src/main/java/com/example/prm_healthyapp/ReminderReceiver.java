@@ -14,7 +14,7 @@ public class ReminderReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         int activityId = intent.getIntExtra("activityId", -1);
 
-        // Create a pending intent to open your main activity or another relevant activity
+        // Create a pending intent to open your main ac tivity or another relevant activity
         Intent notificationIntent = new Intent(context, MainActivity.class); // Change to your target activity
         notificationIntent.putExtra("activityId", activityId); // Pass any necessary data
         PendingIntent pendingIntent = PendingIntent.getActivity(context, activityId, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
