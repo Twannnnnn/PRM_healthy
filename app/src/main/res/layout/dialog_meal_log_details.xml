@@ -20,6 +20,8 @@ android:textColor="#333333"
 
 
     <androidx.appcompat.widget.AppCompatButton
+
+        android:layout_margin="12dp"
         android:background="@drawable/button_background"
 android:id="@+id/btnClose"
 android:layout_width="match_parent"

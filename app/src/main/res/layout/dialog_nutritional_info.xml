@@ -22,7 +22,10 @@
         android:layout_marginTop="8dp" />
 
     <androidx.appcompat.widget.AppCompatButton
+        android:padding="12dp"
+        android:layout_margin="12dp"
         android:background="@drawable/button_background"
+        android:textColor="#FFFFFF"
         android:id="@+id/btnClose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

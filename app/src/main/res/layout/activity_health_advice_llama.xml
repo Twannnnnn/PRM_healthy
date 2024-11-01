@@ -6,32 +6,51 @@
     android:padding="16dp"
     android:background="#A6C8E0"> <!-- Màu nền cho Activity -->
 
-    <TextView
-        android:id="@+id/textViewResult"
-        android:layout_width="374dp"
-        android:layout_height="493dp" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="570dp"
+        android:layout_weight="1"
+        android:background="#FFFFFF"
+        android:padding="8dp"> <!-- Cho phép ScrollView chiếm không gian còn lại -->
+
+        <android.widget.TextView
+            android:id="@+id/textViewResult"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
+            android:padding="8dp"
+            android:textColor="#000000" />
+
+    </ScrollView>
 
     <EditText
         android:id="@+id/editTextInput"
         android:layout_width="match_parent"
-        android:layout_height="35dp"
+        android:layout_height="41dp"
+        android:layout_margin="8dp"
+        android:background="#FFFFFF"
         android:ems="10"
-        android:inputType="text" />
+        android:hint="    Input Question Here"
+        android:inputType="text"
+        android:textColor="#000000" />
+
     <Button
         android:id="@+id/buttonSendAdviceRequest"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Get Advice" />
-    <Button
+        android:layout_width="6dp"
+        android:layout_height="9dp"
+        android:text="Send Request" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:padding="12dp"
+        android:layout_margin="12dp"
+        android:background="@drawable/button_background"
         android:id="@+id/buttonGetAdvice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/button_background"
-    android:text="Get Advice"
-    android:textColor="#FFFFFF"
-    android:padding="12dp"
-    android:layout_gravity="center" />
 
-    <!-- Căn giữa button -->
+        android:text="Get Advice"
+        android:textColor="#FFFFFF"
+
+        android:layout_gravity="center" />
 
 </LinearLayout>

@@ -63,6 +63,7 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:padding="12dp"
+            android:textColor="#FFFFFF"
             android:background="@drawable/button_background"
             android:id="@+id/buttonSave"
             android:layout_width="wrap_content"
