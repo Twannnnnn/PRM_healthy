@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    private FrameLayout btnGoToReport, btnAddFood, btnUserInfo, btnGoToSleepLog, btnGoToActivities, btnAIChat,btnGoToHealthAdvice;
+    private FrameLayout btnGoToReport, btnAddFood, btnUserInfo, btnGoToSleepLog, btnGoToActivities, btnAIChat,btnGoToHealthAdvice,btnMealPlan;
 
     private DatabaseHelper dbHelper;
 
@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         btnGoToActivities = findViewById(R.id.btnGoToActivities);
         btnGoToSleepLog = findViewById(R.id.btnGoToSleepLog);
         btnGoToHealthAdvice = findViewById(R.id.btnGetAdvice);
+        btnMealPlan = findViewById(R.id.btnMealPlan);
 
 
         // Set up click listeners
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         btnGoToActivities.setOnClickListener(this::onActivities);
         btnGoToSleepLog.setOnClickListener(this::onSleepLog);
         btnGoToHealthAdvice.setOnClickListener(this::onActionGoToHealthAdvice);
+        btnMealPlan.setOnClickListener(this::onMealPlan);
         checkUser();
     }
 

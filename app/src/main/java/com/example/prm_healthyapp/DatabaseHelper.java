@@ -756,5 +756,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return exists;
     }
+    public List<Meal> getMealsForDate(String date, int userId) {
+        List<Meal> meals = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Truy vấn lấy planned_food_items theo user_id và plan_date
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM meal_plan WHERE plan_date = ? AND user_id = ?",
+                new String[]{date, String.valueOf(userId)}
+        );
+
+        if (cursor.moveToFirst()) {
+            do {
+                Meal meal = new Meal(
+                        cursor.getInt(cursor.getColumnIndex("id")),
+                        cursor.getInt(cursor.getColumnIndex("user_id")),
+                        cursor.getString(cursor.getColumnIndex("meal_type")),
+                        cursor.getString(cursor.getColumnIndex("planned_food_items")),
+                        cursor.getString(cursor.getColumnIndex("planned_calories")),
+                        cursor.getString(cursor.getColumnIndex("plan_date"))
+                );
+                meals.add(meal);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return meals;
+    }
 
 }

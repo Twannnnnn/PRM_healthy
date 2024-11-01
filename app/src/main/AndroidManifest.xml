@@ -21,6 +21,9 @@
             android:name=".AddMealPlanActivity"
             android:exported="false" />
         <activity
+            android:name=".DailyMealActivity"
+            android:exported="false" />
+        <activity
             android:name=".MealPlan"
             android:exported="false" />
         <activity
