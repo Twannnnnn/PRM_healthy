@@ -72,7 +72,10 @@
 
 
     <!-- Nút Lưu -->
-    <Button
+    <android.widget.Button
+        android:background="@drawable/button_background"
+        android:textColor="#FFFFFF"
+        android:padding="12dp"
         android:id="@+id/buttonSaveMealPlan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
