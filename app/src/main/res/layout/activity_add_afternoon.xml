@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="#F7F8FB"
+    android:background="#A6C8E0"
     tools:context=".AddAfternoonActivity">
     <RelativeLayout
         android:layout_width="match_parent"
@@ -121,12 +121,15 @@
     </LinearLayout>
 
     <!-- Confirm button -->
-    <Button
+    <android.widget.Button
+        android:background="@drawable/button_background"
+
+        android:padding="12dp"
         android:id="@+id/confirmButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:backgroundTint="#000000"
+
         android:text="Confirm"
         android:textSize="16sp"
         android:textColor="#FFFFFF"

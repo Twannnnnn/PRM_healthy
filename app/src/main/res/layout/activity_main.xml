@@ -27,8 +27,8 @@
             android:layout_height="match_parent">
 
             <GridLayout
-                android:layout_width="347dp"
-                android:layout_height="685dp"
+                android:layout_width="358dp"
+                android:layout_height="686dp"
                 android:layout_gravity="center"
                 android:columnCount="2"
                 android:padding="16dp"
