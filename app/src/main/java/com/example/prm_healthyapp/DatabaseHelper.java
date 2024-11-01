@@ -7,8 +7,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "health_management.db";
@@ -781,6 +784,50 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         return meals;
+    }
+    public void saveNutritionGoals(int userId, String calorieGoal, String proteinGoal, String fatGoal, String setDate) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("user_id", userId);
+        values.put("daily_calorie_goal", calorieGoal);
+        values.put("daily_protein_goal", proteinGoal);
+        values.put("daily_fat_goal", fatGoal);
+        values.put("set_date", setDate);
+
+        long newRowId = db.insert("nutrition_goals", null, values);
+        db.close();
+    }
+
+    public User getUser(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        User user = null;
+        Cursor cursor = null;
+        try {
+            cursor = db.query("users", null, "id=?", new String[]{String.valueOf(userId)}, null, null, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                String name = cursor.getString(cursor.getColumnIndex("name"));
+                String email = cursor.getString(cursor.getColumnIndex("email"));
+                String password = cursor.getString(cursor.getColumnIndex("password"));
+                int age = cursor.getInt(cursor.getColumnIndex("age"));
+                String gender = cursor.getString(cursor.getColumnIndex("gender"));
+                double weight = cursor.getDouble(cursor.getColumnIndex("weight"));
+                double height = cursor.getDouble(cursor.getColumnIndex("height"));
+                double bmi = cursor.getDouble(cursor.getColumnIndex("bmi"));
+                double bodyFatPercentage = cursor.getDouble(cursor.getColumnIndex("body_fat_percentage"));
+                double waist = cursor.getDouble(cursor.getColumnIndex("waist"));
+                double neck = cursor.getDouble(cursor.getColumnIndex("neck"));
+                double hips = cursor.getDouble(cursor.getColumnIndex("hips"));
+
+                // Tạo đối tượng User
+                user = new User(userId, name, email, password, age, gender, weight, height, bmi, bodyFatPercentage, waist, neck, hips);
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            db.close();
+        }
+        return user;
     }
 
 }

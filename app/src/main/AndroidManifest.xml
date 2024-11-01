@@ -18,6 +18,9 @@
         android:theme="@style/Theme.PRM_HealthyApp"
         tools:targetApi="31">
         <activity
+            android:name=".SetNutritionGoalsActivity"
+            android:exported="false" />
+        <activity
             android:name=".AddMealPlanActivity"
             android:exported="false" />
         <activity

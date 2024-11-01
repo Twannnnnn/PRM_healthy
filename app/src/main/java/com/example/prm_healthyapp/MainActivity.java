@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    private FrameLayout btnGoToReport, btnAddFood, btnUserInfo, btnGoToSleepLog, btnGoToActivities, btnAIChat,btnGoToHealthAdvice,btnMealPlan;
+    private FrameLayout btnGoToReport, btnAddFood, btnUserInfo, btnGoToSleepLog, btnGoToActivities, btnAIChat,btnGoToHealthAdvice,btnMealPlan,btnSetNutritionGoal;
 
     private DatabaseHelper dbHelper;
 
@@ -45,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
         btnGoToSleepLog.setOnClickListener(this::onSleepLog);
         btnGoToHealthAdvice.setOnClickListener(this::onActionGoToHealthAdvice);
         btnMealPlan.setOnClickListener(this::onMealPlan);
+
+
         checkUser();
     }
 
@@ -135,6 +137,12 @@ public class MainActivity extends AppCompatActivity {
     private void onMealPlan(View view) {
         // Navigate to UserInfoActivity
         Intent intent = new Intent(MainActivity.this, MealPlan.class);
+        startActivity(intent);
+    }
+
+    private void onSetNutritionGoal(View view) {
+        // Navigate to UserInfoActivity
+        Intent intent = new Intent(MainActivity.this, SetNutritionGoalsActivity.class);
         startActivity(intent);
     }
 
