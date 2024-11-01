@@ -2,7 +2,6 @@ package com.example.prm_healthyapp;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,7 +35,6 @@ public class HealthAdviceActivityLlama extends AppCompatActivity {
 
         // Kiểm tra xem textViewResult có phải là null không
         if (textViewResult != null) {
-
             String adviceRequest = getIntent().getStringExtra("adviceRequest");
             if (adviceRequest != null) {
                 sendAdviceRequest(adviceRequest);
@@ -45,11 +43,13 @@ public class HealthAdviceActivityLlama extends AppCompatActivity {
 
         dbHelper = new DatabaseHelper(this);
 
-
-
         buttonGetAdvice.setOnClickListener(v -> {
             String foodDescription = editTextInput.getText().toString();
             if (!foodDescription.isEmpty()) {
+                // Hiển thị câu hỏi của người dùng
+                String userMessage = "You: " + foodDescription + "\n\n"; // Thêm một dòng trống
+                textViewResult.append(userMessage); // Thêm câu hỏi vào TextView
+
                 YourRequestType request = new YourRequestType(
                         Collections.singletonList(new Message("user", foodDescription)),
                         "llama3-8b-8192"
@@ -60,7 +60,17 @@ public class HealthAdviceActivityLlama extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<YourResponseType> call, Response<YourResponseType> response) {
                         if (response.isSuccessful() && response.body() != null) {
-                            textViewResult.setText(response.body().toString());
+                            List<YourResponseType.Choice> choices = response.body().getChoices(); // Tham chiếu đến Choice
+                            if (choices != null && !choices.isEmpty()) {
+                                StringBuilder responseMessage = new StringBuilder();
+                                for (YourResponseType.Choice choice : choices) {
+                                    String aiResponse = choice.getMessage().getContent(); // Lấy nội dung từ message
+                                    responseMessage.append("AI: ").append(aiResponse).append("\n\n"); // Định dạng phần trả lời của AI và thêm khoảng cách
+                                }
+                                textViewResult.append(responseMessage.toString()); // Đặt nội dung vào TextView
+                            } else {
+                                textViewResult.append("AI: No choices found in response.\n\n");
+                            }
                         } else {
                             handleErrorResponse(response);
                         }
@@ -114,14 +124,15 @@ public class HealthAdviceActivityLlama extends AppCompatActivity {
                         StringBuilder responseMessage = new StringBuilder();
                         for (YourResponseType.Choice choice : choices) {
                             String aiResponse = choice.getMessage().getContent(); // Lấy nội dung từ message
-                            responseMessage.append("AI: ").append(aiResponse).append("\n"); // Định dạng phần trả lời của AI
+                            responseMessage.append("Professor: ").append(aiResponse).append("\n\n"); // Định dạng phần trả lời của AI và thêm khoảng cách
+                            editTextInput.setText(" ");
                         }
-                        textViewResult.setText(responseMessage.toString()); // Đặt nội dung vào TextView
+                        textViewResult.append(responseMessage.toString()); // Đặt nội dung vào TextView
                     } else {
-                        textViewResult.setText("No choices found in response.");
+                        textViewResult.append("AI: No choices found in response.\n\n");
                     }
                 } else {
-                    textViewResult.setText("Failed to retrieve response.");
+                    textViewResult.append("Failed to retrieve response.\n\n");
                 }
             }
 

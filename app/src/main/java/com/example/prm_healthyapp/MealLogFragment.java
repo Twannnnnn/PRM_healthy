@@ -38,7 +38,7 @@ public class MealLogFragment extends Fragment {
     private LogAdapter logAdapter;
     private List<LogItem> logList;
     private DatabaseHelper dbHelper;
-
+    private int completedRequests = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -234,22 +234,20 @@ public class MealLogFragment extends Fragment {
     private void calculateNutritionTotal(String startDate, String endDate) {
         Cursor cursor = dbHelper.getAllMealLogs(1); // Thay thế bằng userId thực tế
 
-        // Tạo đối tượng NutritionTotals để lưu trữ tổng
         NutritionTotals totals = new NutritionTotals();
-
         List<String> foodItemsList = new ArrayList<>();
 
-        // Lấy danh sách món ăn như trước
         while (cursor.moveToNext()) {
             String mealLogDate = cursor.getString(cursor.getColumnIndex("log_date"));
             if (isDateInRange(mealLogDate, startDate, endDate)) {
                 String foodItems = cursor.getString(cursor.getColumnIndex("food_items"));
-                foodItemsList.add(foodItems); // Thêm vào danh sách
+                foodItemsList.add(foodItems);
             }
         }
         cursor.close();
 
-        // Gọi Nutrition API với danh sách món ăn
+        completedRequests = 0; // Đặt lại số lượng yêu cầu đã hoàn thành
+
         for (String foodItems : foodItemsList) {
             fetchNutritionalInfoFromApi(foodItems, (calories, protein, fat, carbohydrates) -> {
                 totals.totalCalories += calories;
@@ -257,10 +255,13 @@ public class MealLogFragment extends Fragment {
                 totals.totalFat += fat;
                 totals.totalCarbohydrates += carbohydrates;
 
-                // Sau khi tính toán, hiển thị kết quả
-                String resultMessage = String.format("Total Calories: %.2f\nTotal Protein: %.2f g\nTotal Fat: %.2f g\nTotal Carbohydrates: %.2f g",
-                        totals.totalCalories, totals.totalProtein, totals.totalFat, totals.totalCarbohydrates);
-                showResultDialog(resultMessage);
+                completedRequests++; // Tăng số lượng yêu cầu đã hoàn thành
+
+                if (completedRequests == foodItemsList.size()+3) { // Nếu tất cả yêu cầu đã hoàn thành
+                    String resultMessage = String.format("Total Calories: %.2f\nTotal Protein: %.2f g\nTotal Fat: %.2f g\nTotal Carbohydrates: %.2f g",
+                            totals.totalCalories, totals.totalProtein, totals.totalFat, totals.totalCarbohydrates);
+                    showResultDialog(resultMessage); // Hiển thị kết quả
+                }
             });
         }
     }
