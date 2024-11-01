@@ -35,9 +35,9 @@
                 android:layout_width="358dp"
                 android:layout_height="686dp"
                 android:layout_gravity="center"
-                android:columnCount="2"
+                android:columnCount="3"
                 android:padding="16dp"
-                android:rowCount="6"
+                android:rowCount="7"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -225,6 +225,59 @@
                 </FrameLayout>
 
                 <FrameLayout
+                    android:id="@+id/btnSetNutritionGoal"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_row="5"
+                    android:layout_column="1"
+                    android:layout_margin="8dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="152dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/nutrition" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|center_horizontal"
+                        android:background="#66000000"
+                        android:gravity="center"
+                        android:padding="4dp"
+                        android:text="Set Nutrition Goal"
+                        android:textColor="#ffffff" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/btnDietaryHabit"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_row="6"
+                    android:layout_column="0"
+                    android:layout_margin="8dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="152dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/dietary_habit" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|center_horizontal"
+                        android:background="#66000000"
+                        android:gravity="center"
+                        android:padding="4dp"
+                        android:text="Dietary Habit"
+                        android:textColor="#ffffff" />
+                </FrameLayout>
+
+
+
+
+                <FrameLayout
                     android:id="@+id/btnGetAdvice"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
@@ -325,6 +378,12 @@
                         android:gravity="center"
                         android:padding="4dp" />
                 </FrameLayout>
+
+
+
+
+
+
 
             </GridLayout>
             </ScrollView>

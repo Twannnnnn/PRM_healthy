@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    private FrameLayout btnGoToReport, btnAddFood, btnUserInfo, btnGoToSleepLog, btnGoToActivities, btnAIChat,btnGoToHealthAdvice,btnMealPlan,btnSetNutritionGoal, btnShare, btnSync, btnExpert;
+    private FrameLayout btnGoToReport, btnAddFood, btnUserInfo, btnGoToSleepLog, btnGoToActivities, btnAIChat,btnGoToHealthAdvice,btnMealPlan,btnSetNutritionGoal,btnDietaryHabit, btnShare, btnSync, btnExpert;
 
     private DatabaseHelper dbHelper;
 
@@ -34,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
         btnGoToSleepLog = findViewById(R.id.btnGoToSleepLog);
         btnGoToHealthAdvice = findViewById(R.id.btnGetAdvice);
         btnMealPlan = findViewById(R.id.btnMealPlan);
+        btnSetNutritionGoal = findViewById(R.id.btnSetNutritionGoal);
+        btnDietaryHabit = findViewById(R.id.btnDietaryHabit);
         btnSync = findViewById(R.id.btnSync);
         btnShare = findViewById(R.id.btnShare);
         btnExpert = findViewById(R.id.btnExpert);
@@ -60,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
         btnGoToSleepLog.setOnClickListener(this::onSleepLog);
         btnGoToHealthAdvice.setOnClickListener(this::onActionGoToHealthAdvice);
         btnMealPlan.setOnClickListener(this::onMealPlan);
+        btnDietaryHabit.setOnClickListener(this::onDietaryHabit);
+        btnSetNutritionGoal.setOnClickListener(this::onSetNutritionGoal);
 
 
         checkUser();

@@ -94,11 +94,25 @@ public class SetNutritionGoalsActivity extends AppCompatActivity {
             fatGoalEditText.setText("Lượng chất béo cần đạt: " + fatGoal + " g");
             bmiEvaluationTextView.setText("Đánh giá BMI: " + bmiEvaluation);
 
+            int daysToReachGoal = 0;
+            double dailyCaloricAdjustment = dailyCaloricNeeds - calculateCaloricNeeds(currentWeight, currentHeight, age, gender); // This will be positive if we need a surplus, negative if we need a deficit
+
             // Tính trọng lượng tối ưu cho chỉ số BMI "Cân đối"
             double optimalWeight = 22.0 * (heightInMeters * heightInMeters); // Giả sử mục tiêu là BMI 22
             double weightChangeGoal = optimalWeight - currentWeight; // Mục tiêu thay đổi trọng lượng
             double totalCaloricChange = weightChangeGoal * 7700; // kcal
-            int daysToReachGoal = (int) (totalCaloricChange / dailyCaloricNeeds); // Số ngày để đạt được mục tiêu
+            if (dailyCaloricAdjustment != 0) {
+                daysToReachGoal = (int) Math.abs(totalCaloricChange / dailyCaloricAdjustment); // Days needed to reach goal
+                Calendar targetCalendar = Calendar.getInstance();
+                targetCalendar.add(Calendar.DAY_OF_MONTH, daysToReachGoal);
+
+                // Format the completion date
+                String estimatedCompletionDate = targetCalendar.get(Calendar.DAY_OF_MONTH) + "/" +
+                        (targetCalendar.get(Calendar.MONTH) + 1) + "/" + targetCalendar.get(Calendar.YEAR);
+                targetDateTextView.setText("Ngày hoàn thành dự kiến: " + estimatedCompletionDate);
+            } else {
+                targetDateTextView.setText("Không có thay đổi về calo cần thiết để đạt mục tiêu cân nặng.");
+            }
 
             Calendar targetCalendar = Calendar.getInstance();
             targetCalendar.add(Calendar.DAY_OF_MONTH, daysToReachGoal);
