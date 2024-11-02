@@ -222,15 +222,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT * FROM activity WHERE user_id = ?", new String[]{String.valueOf(userId)});
     }
-    public void updateUser(int id, String name, String email, String password) {
+
+    public void updateUser(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("name", name);
-        values.put("email", email);
-        values.put("password", password);
-        db.update("users", values, "id = ?", new String[]{String.valueOf(id)});
+
+        values.put("name", user.getName());
+        values.put("email", user.getEmail());
+        values.put("password", user.getPassword());
+        values.put("age", user.getAge());
+        values.put("gender", user.getGender());
+        values.put("weight", user.getWeight());
+        values.put("height", user.getHeight());
+        values.put("bmi", user.getBmi());
+        values.put("body_fat_percentage", user.getBodyFatPercentage());
+        values.put("waist", user.getWaist());
+        values.put("neck", user.getNeck());
+        values.put("hips", user.getHips());
+        db.update("users", values, "id = ?", new String[]{String.valueOf(user.getId())});
         db.close();
     }
+
+
     public void deleteUser(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete("users", "id = ?", new String[]{String.valueOf(id)});

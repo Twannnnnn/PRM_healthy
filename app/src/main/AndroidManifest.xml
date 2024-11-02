@@ -30,6 +30,9 @@
             </intent-filter>
         </receiver>
         <activity
+            android:name=".UpdateUserInformationActivity"
+            android:exported="false" />
+        <activity
             android:name=".ExpertAdviceActivity"
             android:exported="false" />
         <activity

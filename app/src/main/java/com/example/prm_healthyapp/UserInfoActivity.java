@@ -1,6 +1,8 @@
 package com.example.prm_healthyapp;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,6 +19,7 @@ public class UserInfoActivity extends AppCompatActivity {
     private TextView textViewWaist;
     private TextView textViewNeck;
     private TextView textViewHips;
+    private Button buttonUpdateUserInfo;
 
     private DatabaseHelper dbHelper;
 
@@ -24,6 +27,7 @@ public class UserInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
+
 
         // Khởi tạo DatabaseHelper
         dbHelper = new DatabaseHelper(this);
@@ -48,6 +52,7 @@ public class UserInfoActivity extends AppCompatActivity {
         textViewWaist = findViewById(R.id.textViewWaist);
         textViewNeck = findViewById(R.id.textViewNeck);
         textViewHips = findViewById(R.id.textViewHips);
+        buttonUpdateUserInfo = findViewById(R.id.buttonUpdateUserInfo);
     }
 
     private void bindingAction() {
@@ -79,5 +84,9 @@ public class UserInfoActivity extends AppCompatActivity {
             textViewNeck.setText("");
             textViewHips.setText("");
         }
+        buttonUpdateUserInfo.setOnClickListener(v -> {
+            Intent intent = new Intent(UserInfoActivity.this, UpdateUserInformationActivity.class);
+            startActivity(intent);
+        });
     }
 }
