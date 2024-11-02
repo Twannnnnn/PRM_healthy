@@ -24,15 +24,13 @@ public class SetNutritionGoalsActivity extends AppCompatActivity {
     private DatabaseHelper mealPlanDatabase;
     private Calendar calendar;
 
-    private int userId = 1; // Id của người dùng (giả sử có)
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_nutrition_goals);
 
         DatabaseHelper dbHelper = new DatabaseHelper(this);
-        User user = dbHelper.getUser(userId); // Lấy thông tin người dùng từ database
+        User user = dbHelper.getFirstUser(); // Lấy thông tin người dùng từ database
 
         currentWeightTextView = findViewById(R.id.currentWeightTextView);
         currentHeightTextView = findViewById(R.id.currentHeightTextView);
@@ -134,7 +132,7 @@ public class SetNutritionGoalsActivity extends AppCompatActivity {
                 }
 
                 // Lưu vào database
-                dbHelper.saveNutritionGoals(userId, calorieGoal, proteinGoalStr, fatGoalStr, setDate);
+                dbHelper.saveNutritionGoals(dbHelper.getFirstUser().getId(), calorieGoal, proteinGoalStr, fatGoalStr, setDate);
                 feedbackTextView.setText("Mục tiêu dinh dưỡng đã được lưu thành công!");
                 feedbackTextView.setVisibility(View.VISIBLE);
             });
