@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         dbHelper = new DatabaseHelper(this);
         dbHelper.addDefaultSleepActivity();
+        //dbHelper.deleteUser(dbHelper.getFirstUser().getId());
         // Initialize FrameLayouts instead of Buttons
         btnGoToReport = findViewById(R.id.btnGoToReport);
         btnAIChat = findViewById(R.id.Aichat);
