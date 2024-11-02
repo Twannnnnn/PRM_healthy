@@ -29,10 +29,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         dbHelper = new DatabaseHelper(this);
         dbHelper.addDefaultSleepActivity();
-
         // Initialize FrameLayouts instead of Buttons
         btnGoToReport = findViewById(R.id.btnGoToReport);
-        btnAddFood = findViewById(R.id.btnAddFood);
         btnAIChat = findViewById(R.id.Aichat);
         btnUserInfo = findViewById(R.id.btnUserInfo);
         btnGoToActivities = findViewById(R.id.btnGoToActivities);
@@ -43,17 +41,12 @@ public class MainActivity extends AppCompatActivity {
         btnDietaryHabit = findViewById(R.id.btnDietaryHabit);
         btnSync = findViewById(R.id.btnSync);
         btnShare = findViewById(R.id.btnShare);
-        btnExpert = findViewById(R.id.btnExpert);
         btnSync.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, SyncActivity.class);
             startActivity(intent);
         });
         btnShare.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, SharePlanActivity.class);
-            startActivity(intent);
-        });
-        btnExpert.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, ExpertAdviceActivity.class);
             startActivity(intent);
         });
 
@@ -65,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Set up click listeners
-        btnAddFood.setOnClickListener(v -> showAddFoodDialog());
         btnAIChat.setOnClickListener(this::onActionChat);
         btnGoToReport.setOnClickListener(this::onAction);
         btnUserInfo.setOnClickListener(this::onUserInfoAction);
@@ -100,35 +92,6 @@ public class MainActivity extends AppCompatActivity {
         // Navigate to HealthAdviceActivity
         Intent intent = new Intent(MainActivity.this, HealthAdviceActivity.class);
         startActivity(intent);
-    }
-
-    private void showAddFoodDialog() {
-        Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.dialog_add_food);
-        dialog.setCancelable(true);
-
-        EditText editTextFoodName = dialog.findViewById(R.id.editTextFoodName);
-        EditText editTextFat = dialog.findViewById(R.id.editTextFat);
-        EditText editTextProtein = dialog.findViewById(R.id.editTextProtein);
-        EditText editTextCarbohydrates = dialog.findViewById(R.id.editTextCarbohydrates);
-        EditText editTextFiber = dialog.findViewById(R.id.editTextFiber);
-        Button buttonSaveFood = dialog.findViewById(R.id.buttonSaveFood);
-
-        buttonSaveFood.setOnClickListener(v -> {
-            String name = editTextFoodName.getText().toString();
-            float fat = Float.parseFloat(editTextFat.getText().toString());
-            float protein = Float.parseFloat(editTextProtein.getText().toString());
-            float carbohydrates = Float.parseFloat(editTextCarbohydrates.getText().toString());
-            float fiber = Float.parseFloat(editTextFiber.getText().toString());
-
-            // Call method to save food to database
-            // dbHelper.addFood(name, fat, protein, carbohydrates, fiber);
-
-            Toast.makeText(MainActivity.this, "Thực phẩm đã được thêm", Toast.LENGTH_SHORT).show();
-            dialog.dismiss();
-        });
-
-        dialog.show();
     }
 
     private void checkUser() {

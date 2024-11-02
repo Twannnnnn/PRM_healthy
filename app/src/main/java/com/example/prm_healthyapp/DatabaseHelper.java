@@ -708,6 +708,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Method to retrieve all FoodItem objects
+
     public List<FoodItem> getAllFoodItems() {
         List<FoodItem> foodItems = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -715,7 +716,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                FoodItem foodItem = new FoodItem(
+                @SuppressLint("Range") FoodItem foodItem = new FoodItem(
                         cursor.getInt(cursor.getColumnIndex("id")),
                         cursor.getString(cursor.getColumnIndex("name")),
                         cursor.getDouble(cursor.getColumnIndex("fat")),
@@ -773,7 +774,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                Meal meal = new Meal(
+                @SuppressLint("Range") Meal meal = new Meal(
                         cursor.getInt(cursor.getColumnIndex("id")),
                         cursor.getInt(cursor.getColumnIndex("user_id")),
                         cursor.getString(cursor.getColumnIndex("meal_type")),
@@ -799,7 +800,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         long newRowId = db.insert("nutrition_goals", null, values);
         db.close();
     }
-
+    @SuppressLint("Range")
     public User getUser(int userId) {
         SQLiteDatabase db = this.getReadableDatabase();
         User user = null;
